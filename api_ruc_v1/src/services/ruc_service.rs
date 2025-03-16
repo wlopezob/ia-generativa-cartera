@@ -5,21 +5,40 @@ use log::{info, error};
 use crate::api_caller::open_api_caller::obtener_datos_caller;
 use crate::api_caller::sunat_api_caller::consultar_ruc_caller;
 use crate::exception::api_error::ApiError;
+use crate::exception::error_type::ErrorType;
 use crate::modelo::openai::{ChatCompletionRequest, ChatCompletionResponse};
 use crate::modelo::sunat::RucResponse;
 
-
-
 pub async fn obtener_empresa(nro_ruc: &str) -> Result<RucResponse, ApiError> {
     // consulta sunat ruc
-    let html_ruc = consultar_ruc_caller(nro_ruc, 30).await?.text().await?;
-    info!("HTML de respuesta: {}", html_ruc);
+    let html_response = consultar_ruc_caller(nro_ruc, 30).await
+        .map_err(|e| {
+            error!("Error al consultar RUC en SUNAT: {:?}", e);
+            e
+        })?;
+    
+    // Verificar si la respuesta es exitosa
+    if !html_response.status().is_success() {
+        return Err(ApiError::ExternalServiceError(
+            format!("Error en la respuesta de SUNAT: {}", html_response.status()),
+            ErrorType::SunatError
+        ));
+    }
+    
+    let html_ruc = html_response.text().await
+        .map_err(|e| ApiError::ExternalServiceError(
+            format!("Error al obtener texto de la respuesta: {}", e),
+            ErrorType::SunatError
+        ))?;
+    
+    info!("HTML de respuesta recibido con éxito");
     
     let response = obtener_datos_caller(html_ruc).await?;
+    
     // Manejar la respuesta
     if response.status().is_success() {
         let completion: ChatCompletionResponse = response.json().await
-            .map_err(|_| ApiError::Generic("Error convirtieno json: ChatCompletionResponse".to_string()))?;
+            .map_err(|e| ApiError::Generic(e))?;
         
         // Registrar información sobre tokens utilizados
         info!(
@@ -37,54 +56,27 @@ pub async fn obtener_empresa(nro_ruc: &str) -> Result<RucResponse, ApiError> {
             );
             
             // Intentar parsear el JSON que viene como string a nuestro struct RucResponse
-            match serde_json::from_str::<RucResponse>(&choice.message.content) {
-                Ok(ruc_info) => {
-                    info!("Información de RUC parseada correctamente");
-                    Ok(ruc_info)
-                },
-                Err(e) => {
-                    error!("Error al parsear la respuesta como JSON: {}", e);
-                    // Crear una respuesta de error en caso de que el parseo falle
-                    let error_response = RucResponse {
-                        status: false,
-                        ruc: nro_ruc.to_string(),
-                        nombre_persona_empresa: format!("Error de parseo: {}", e),
-                        nombre_comercial: "".to_string(),
-                        estado_contribuyente: "".to_string(),
-                        condicion_contribuyente: "".to_string(),
-                        domicilio_fiscal: "".to_string(),
-                    };
-                    Ok(error_response)
-                }
-            }
+            let ruc_info = serde_json::from_str::<RucResponse>(&choice.message.content)
+                .map_err(|e| ApiError::SerdeError(e))?;
+                
+            info!("Información de RUC parseada correctamente");
+            Ok(ruc_info)
         } else {
-            // Crear una respuesta en caso de que no haya choices
-            let error_response = RucResponse {
-                status: false,
-                ruc: nro_ruc.to_string(),
-                nombre_persona_empresa: "No se recibió respuesta del modelo".to_string(),
-                nombre_comercial: "".to_string(),
-                estado_contribuyente: "".to_string(),
-                condicion_contribuyente: "".to_string(),
-                domicilio_fiscal: "".to_string(),
-            };
-            Ok(error_response)
+            Err(ApiError::ExternalServiceError(
+                "No se recibió respuesta del modelo".to_string(),
+                ErrorType::OpenAiError
+            ))
         }
     } else {
         let status = response.status();
-        let error_text = response.text().await?;
+        let error_text = response.text().await
+            .unwrap_or_else(|_| "No se pudo obtener el texto del error".to_string());
+            
         error!("Error al llamar a OpenAI API: {} - {}", status, error_text);
         
-        // Crear una respuesta de error para el error HTTP
-        let error_response = RucResponse {
-            status: false,
-            ruc: nro_ruc.to_string(),
-            nombre_persona_empresa: format!("Error al comunicarse con OpenAI: {}", status),
-            nombre_comercial: "".to_string(),
-            estado_contribuyente: "".to_string(),
-            condicion_contribuyente: "".to_string(),
-            domicilio_fiscal: "".to_string(),
-        };
-        Ok(error_response)
+        Err(ApiError::ExternalServiceError(
+            format!("Error al comunicarse con OpenAI: {} - {}", status, error_text),
+            ErrorType::OpenAiError
+        ))
     }
 }

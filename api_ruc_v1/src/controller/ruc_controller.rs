@@ -1,14 +1,26 @@
 use actix_web::{post, web, HttpResponse, Responder};
 use crate::{
     modelo::sunat::{RucRequest, RucResponse, SunatRequest},
-    services::{ruc_service::obtener_empresa}
+    services::{ruc_service::obtener_empresa},
+    exception::{error_response::ApiException, error_type::ErrorType}
 };
 use serde::{Deserialize, Serialize};
+use log::{error, info};
 
 #[post("/ruc")]
 pub async fn consulta_ruc(consulta: web::Json<RucRequest>) -> impl Responder {
     // Mostramos el valor recibido
-    println!("Recibido RUC: {}", consulta.nro_ruc);
+    info!("Recibido RUC: {}", consulta.nro_ruc);
+    
+    // Validar RUC
+    if consulta.nro_ruc.len() != 11 || !consulta.nro_ruc.chars().all(|c| c.is_digit(10)) {
+        let api_exception = ApiException::new(
+            ErrorType::InvalidRuc,
+            "ruc_controller".to_string(), 
+            Some(format!("El RUC {} no tiene el formato correcto", consulta.nro_ruc))
+        );
+        return HttpResponse::BadRequest().json(api_exception);
+    }
     
     // Consultamos a OpenAI con el RUC como mensaje y obtenemos la estructura RucResponse directamente
     match obtener_empresa(&consulta.nro_ruc).await {
@@ -17,22 +29,12 @@ pub async fn consulta_ruc(consulta: web::Json<RucRequest>) -> impl Responder {
             HttpResponse::Ok().json(ruc_response)
         },
         Err(e) => {
-            // Creamos una respuesta de error
-            let error_response = RucResponse {
-                status: false,
-                ruc: consulta.nro_ruc.clone(),
-                nombre_persona_empresa: format!("Error: {}", e),
-                nombre_comercial: "".to_string(),
-                estado_contribuyente: "".to_string(),
-                condicion_contribuyente: "".to_string(),
-                domicilio_fiscal: "".to_string(),
-            };
-            HttpResponse::InternalServerError().json(error_response)
+            error!("Error al obtener datos del RUC {}: {:?}", consulta.nro_ruc, e);
+            let api_exception = e.to_api_exception("ruc_controller");
+            HttpResponse::InternalServerError().json(api_exception)
         }
     }
 }
-
-
 
 // #[post("/sunat")]
 // pub async fn consulta_sunat(consulta: web::Json<SunatRequest>) -> impl Responder {

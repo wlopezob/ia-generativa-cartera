@@ -1,12 +1,12 @@
-use rand::distr::Alphanumeric;
 use rand::{rng, thread_rng, Rng};
-use reqwest::{Client, Error, Response};
+use rand::distributions::Alphanumeric;
+use reqwest::{Client, Response};
 use log::{info, error, warn};
 use std::collections::HashMap;
 use std::time::Duration;
-use std::thread;
 
 use crate::exception::api_error::ApiError;
+use crate::exception::error_type::ErrorType;
 
 /// Consulta información de un RUC en la página de SUNAT.
 ///
@@ -25,7 +25,8 @@ pub async fn consultar_ruc_caller(nro_ruc: &str, timeout_secs: u64) -> Result<Re
     // Crear un cliente HTTP con timeout configurado
     let client = Client::builder()
         .timeout(Duration::from_secs(timeout_secs))
-        .build()?;
+        .build()
+        .map_err(|e| ApiError::Generic(format!("Error creando el cliente HTTP: {}", e)))?;
 
     // Configurar los headers - exactamente como en Python
     let mut headers = reqwest::header::HeaderMap::new();
@@ -69,7 +70,22 @@ pub async fn consultar_ruc_caller(nro_ruc: &str, timeout_secs: u64) -> Result<Re
         .headers(headers)
         .form(&form_data)
         .send()
-        .await.map_err(|e| ApiError::ReqwestError(e));
+        .await
+        .map_err(|e| {
+            if e.is_timeout() {
+                ApiError::ExternalServiceError(
+                    format!("Timeout al consultar SUNAT: {}", e),
+                    ErrorType::RequestTimeout
+                )
+            } else if e.is_connect() {
+                ApiError::ExternalServiceError(
+                    format!("Error de conexión con SUNAT: {}", e),
+                    ErrorType::BadGateway
+                )
+            } else {
+                ApiError::ReqwestError(e)
+            }
+        });
         
     match &response {
         Ok(res) => {
@@ -77,6 +93,10 @@ pub async fn consultar_ruc_caller(nro_ruc: &str, timeout_secs: u64) -> Result<Re
                 info!("Consulta exitosa para RUC {}", nro_ruc);
             } else {
                 error!("Error en la consulta. Código de estado: {}", res.status());
+                return Err(ApiError::ExternalServiceError(
+                    format!("Error en la respuesta de SUNAT: {}", res.status()),
+                    ErrorType::SunatError
+                ));
             }
         },
         Err(e) => {
