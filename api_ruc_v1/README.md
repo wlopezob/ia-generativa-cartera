@@ -1,0 +1,1 @@
+cargo add serde --features derive
