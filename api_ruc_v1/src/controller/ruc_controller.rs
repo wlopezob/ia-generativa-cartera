@@ -1,37 +1,32 @@
-use actix_web::{post, web, HttpResponse, Responder};
+use actix_web::{post, web, HttpResponse, Responder, Result};
 use crate::{
     modelo::sunat::{RucRequest, RucResponse, SunatRequest},
     services::{ruc_service::obtener_empresa},
-    exception::{error_response::ApiException, error_type::ErrorType}
+    exception::{api_exception_enum, error_response::ApiException, error_type::ErrorType}
 };
 use serde::{Deserialize, Serialize};
 use log::{error, info};
 
 #[post("/ruc")]
-pub async fn consulta_ruc(consulta: web::Json<RucRequest>) -> impl Responder {
+pub async fn consulta_ruc(consulta: web::Json<RucRequest>) -> Result<HttpResponse, ApiException> {
     // Mostramos el valor recibido
     info!("Recibido RUC: {}", consulta.nro_ruc);
     
     // Validar RUC
     if consulta.nro_ruc.len() != 11 || !consulta.nro_ruc.chars().all(|c| c.is_digit(10)) {
-        let api_exception = ApiException::new(
-            ErrorType::InvalidRuc,
-            "ruc_controller".to_string(), 
-            Some(format!("El RUC {} no tiene el formato correcto", consulta.nro_ruc))
-        );
-        return HttpResponse::BadRequest().json(api_exception);
+        return Err(api_exception_enum::invalid_ruc_error(&consulta.nro_ruc));
     }
     
     // Consultamos a OpenAI con el RUC como mensaje y obtenemos la estructura RucResponse directamente
     match obtener_empresa(&consulta.nro_ruc).await {
         Ok(ruc_response) => {
             // Retornamos directamente la estructura RucResponse como JSON
-            HttpResponse::Ok().json(ruc_response)
+            Ok(HttpResponse::Ok().json(ruc_response))
         },
         Err(e) => {
             error!("Error al obtener datos del RUC {}: {:?}", consulta.nro_ruc, e);
-            let api_exception = e.to_api_exception("ruc_controller");
-            HttpResponse::InternalServerError().json(api_exception)
+            // Convertimos el ApiError a ApiException con el componente adecuado
+            Err(api_exception_enum::unknown_error(&format!("Error al obtener datos del RUC {}: {:?}", consulta.nro_ruc, e)))
         }
     }
 }

@@ -53,3 +53,10 @@ impl ApiError {
         }
     }
 }
+
+// Allow direct conversion from ApiError to ApiException with a default component name
+impl From<ApiError> for ApiException {
+    fn from(error: ApiError) -> Self {
+        error.to_api_exception("api_service")
+    }
+}
