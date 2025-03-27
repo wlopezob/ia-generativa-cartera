@@ -57,5 +57,4 @@ La API estará disponible en `http://localhost:8000`
 
 ## Notas
 
-- En esta implementación de ejemplo, la API no hace una consulta real a SUNAT, sino que simula una respuesta.
-- Para una implementación en producción, se deberá modificar la función `fetch_ruc_info` para hacer una solicitud real a SUNAT.
+- En esta implementación de ejemplo, la API hace una consulta real a SUNAT, considerar solo de forma didactica.
