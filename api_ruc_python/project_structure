@@ -1,0 +1,20 @@
+app/
+├── __init__.py
+├── main.py              # Application entry point
+├── config.py            # Configuration settings
+├── api/
+│   ├── __init__.py
+│   ├── router.py        # API router configuration
+│   └── endpoints/
+│       ├── __init__.py
+│       └── ruc.py       # RUC-specific endpoints
+├── core/
+│   ├── __init__.py
+│   └── settings.py      # Settings from environment variables
+├── services/
+│   ├── __init__.py
+│   ├── llm.py           # LLM integration service
+│   └── sunat.py         # SUNAT API client
+└── models/
+    ├── __init__.py
+    └── ruc.py           # Pydantic models for RUC data 

@@ -38,10 +38,7 @@ pub async fn obtener_empresa(nro_ruc: &str) -> Result<RucResponse, ApiError> {
     // Manejar la respuesta
     if response.status().is_success() {
         let completion: ChatCompletionResponse = response.json().await
-            .map_err(|e| ApiError::ExternalServiceError(
-                format!("Error deserializando respuesta: {}", e),
-                ErrorType::OpenAiError
-            ))?;
+            .map_err(|e| ApiError::SerdeError(e))?;
         
         // Registrar información sobre tokens utilizados
         info!(

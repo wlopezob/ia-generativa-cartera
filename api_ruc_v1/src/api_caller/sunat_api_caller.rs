@@ -1,5 +1,5 @@
-use rand::distr::Alphanumeric;
-use rand::{rng, Rng};
+use rand::{rng, thread_rng, Rng};
+use rand::distributions::Alphanumeric;
 use reqwest::{Client, Response};
 use log::{info, error, warn};
 use std::collections::HashMap;
