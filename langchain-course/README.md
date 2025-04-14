@@ -1,4 +1,4 @@
-## DOC
+## DOC Original, Thanks JamesBriggs
 https://github.com/aurelio-labs/langchain-course
 
 ## VIDEO
