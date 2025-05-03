@@ -1,1 +1,4 @@
-claude-ai/.env
+
+**/rag/**/__pycache__/*
+
+**/.env
