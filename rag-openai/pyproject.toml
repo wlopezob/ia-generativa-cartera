@@ -15,5 +15,6 @@ dependencies = [
     "load-dotenv>=0.1.0",
     "openai>=1.77.0",
     "pip>=25.1.1",
+    "pymongo>=4.12.1",
     "uvicorn>=0.34.2",
 ]

@@ -1,0 +1,3 @@
+.env
+**/rag/**/_pycache_
+rag_older

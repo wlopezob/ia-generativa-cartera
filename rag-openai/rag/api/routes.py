@@ -2,7 +2,7 @@ from fastapi import APIRouter, Query
 from ..services.file_search_service import (
     list_files,
     search_files,
-    query_llm
+    chat
 )
 from ..schemas.file_search import (
     FileListResponse,
@@ -23,5 +23,5 @@ router = APIRouter(prefix="/legalaco")
 #     return search_files(request)
 
 @router.post("/chat", response_model=LLMQueryResponse)
-def post_llm_query(request: LLMQueryRequest):
-    return query_llm(request)
+def post_chat_query(request: LLMQueryRequest):
+    return chat(request)

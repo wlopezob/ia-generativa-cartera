@@ -22,7 +22,8 @@ class FileSearchResponse(BaseModel):
 
 class LLMQueryRequest(BaseModel):
     question: str
+    sessionId: Optional[str] = None
 
 class LLMQueryResponse(BaseModel):
-    answers_id: str
+    sessionId: str
     answers: List[str]

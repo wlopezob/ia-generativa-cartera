@@ -1,4 +1,9 @@
+from datetime import datetime, timezone
+from bson import ObjectId
+import json
+
 from ..core.openai_client import get_openai_client, VECTOR_STORE_ID, MODEL, PROMPT
+import uuid
 from ..schemas.file_search import (
     FileSearchRequest,
     FileSearchResponse,
@@ -6,6 +11,7 @@ from ..schemas.file_search import (
     LLMQueryResponse,
     FileListResponse
 )
+from .db_utils import get_last_response_id, save_message_to_mongo  # <-- importar utilidades de BD
 
 def list_files() -> FileListResponse:
     client = get_openai_client()
@@ -30,8 +36,17 @@ def search_files(request: FileSearchRequest) -> FileSearchResponse:
         matches.append(match)
     return FileSearchResponse(matches=matches)
 
-def query_llm(request: LLMQueryRequest) -> LLMQueryResponse:
+def chat(request: LLMQueryRequest) -> LLMQueryResponse:
     client = get_openai_client()
+    sessionId = request.sessionId
+    last_response_id = None
+
+    if sessionId:
+        last_response_id = get_last_response_id(sessionId)
+    else:
+        sessionId = str(uuid.uuid4())
+    print("sessionId", sessionId)
+    print("last_response_id", last_response_id)
     response = client.responses.create(
         model=MODEL,
         instructions=PROMPT,
@@ -44,15 +59,30 @@ def query_llm(request: LLMQueryRequest) -> LLMQueryResponse:
             "max_num_results": 10
         }],
         include=["file_search_call.results"],
-        previous_response_id="resp_68160e206cb48191a038b1d9812d86c9024c618f06a5dada"
+        previous_response_id=last_response_id
     )
-    answers = []
-    #answers.append(response.output[1].content[0].text)
-    for output in response.output:
+    answers = []  # Initialize answers list
+    for output in response.output:  # Iterate through response output
         if hasattr(output, "content"):
             for content in getattr(output, "content", []):
                 if hasattr(content, "text"):
                     answers.append(content.text)
         elif hasattr(output, "text"):
             answers.append(output.text)
-    return LLMQueryResponse(answers=answers, answers_id=response.id)
+    #print(json.dumps(response.to_dict(), ensure_ascii=False, separators=(',', ':')))
+    #answers.append(response.output[1].content[0].text)
+    # Preparar documento MongoDB
+    doc = {
+        "_id": str(ObjectId()),
+        "sesionId": sessionId,
+        "question": request.question,
+        "answer": answers[0] if answers else "",
+        "totalTokens": getattr(response.usage, "total_tokens", 0) if hasattr(response, "usage") else 0,
+        "lastResponseId": getattr(response, "id", None),
+        "createdAt": datetime.now(timezone.utc),
+        "status": 1
+    }
+    # print("doc", doc)
+    save_message_to_mongo(doc)
+
+    return LLMQueryResponse(answers=answers, sessionId=sessionId)
