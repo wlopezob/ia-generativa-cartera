@@ -1,15 +1,18 @@
-from fastapi import APIRouter, Query
+from fastapi import APIRouter, Query, HTTPException, status
 from ..services.file_search_service import (
     list_files,
     search_files,
-    chat
+    chat,
+    validate_secret
 )
 from ..schemas.file_search import (
     FileListResponse,
     FileSearchRequest,
     FileSearchResponse,
     LLMQueryRequest,
-    LLMQueryResponse
+    LLMQueryResponse,
+    SecretKeyRequest,
+    SecretKeyResponse
 )
 
 router = APIRouter(prefix="/legalaco")
@@ -25,3 +28,13 @@ router = APIRouter(prefix="/legalaco")
 @router.post("/chat", response_model=LLMQueryResponse)
 def post_chat_query(request: LLMQueryRequest):
     return chat(request)
+
+@router.post("/validate-secret", response_model=SecretKeyResponse, status_code=status.HTTP_200_OK)
+def post_validate_secret(request: SecretKeyRequest):
+    result = validate_secret(request)
+    if result:
+        return result
+    raise HTTPException(
+        status_code=status.HTTP_401_UNAUTHORIZED,
+        detail="Invalid secret key or secret not active"
+    )

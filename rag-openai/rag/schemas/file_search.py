@@ -27,3 +27,9 @@ class LLMQueryRequest(BaseModel):
 class LLMQueryResponse(BaseModel):
     sessionId: str
     answers: List[str]
+
+class SecretKeyRequest(BaseModel):
+    secretKey: str
+
+class SecretKeyResponse(BaseModel):
+    secretInterno: str

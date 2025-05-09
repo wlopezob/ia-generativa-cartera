@@ -9,9 +9,11 @@ from ..schemas.file_search import (
     FileSearchResponse,
     LLMQueryRequest,
     LLMQueryResponse,
-    FileListResponse
+    FileListResponse,
+    SecretKeyRequest,
+    SecretKeyResponse
 )
-from .db_utils import get_last_response_id, save_message_to_mongo  # <-- importar utilidades de BD
+from .db_utils import get_last_response_id, save_message_to_mongo, validate_secret_key  # <-- actualizado para incluir validate_secret_key
 
 def list_files() -> FileListResponse:
     client = get_openai_client()
@@ -86,3 +88,13 @@ def chat(request: LLMQueryRequest) -> LLMQueryResponse:
     save_message_to_mongo(doc)
 
     return LLMQueryResponse(answers=answers, sessionId=sessionId)
+
+def validate_secret(request: SecretKeyRequest):
+    """
+    Valida el secretKey en la base de datos MongoDB y retorna el secretInterno si es válido.
+    """
+    result = validate_secret_key(request.secretKey)
+    
+    if result["valid"]:
+        return SecretKeyResponse(secretInterno=result["secretInterno"])
+    return None
