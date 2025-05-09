@@ -23,6 +23,7 @@ class FileSearchResponse(BaseModel):
 class LLMQueryRequest(BaseModel):
     question: str
     sessionId: Optional[str] = None
+    secretInterno: str
 
 class LLMQueryResponse(BaseModel):
     sessionId: str

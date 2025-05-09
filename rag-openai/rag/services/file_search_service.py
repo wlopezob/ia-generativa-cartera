@@ -39,6 +39,12 @@ def search_files(request: FileSearchRequest) -> FileSearchResponse:
     return FileSearchResponse(matches=matches)
 
 def chat(request: LLMQueryRequest) -> LLMQueryResponse:
+    # Validar secretInterno antes de continuar
+    validation_result = validate_secret_key(request.secretInterno)
+    if not validation_result["valid"]:
+        # No lanzamos la excepción aquí, la manejamos en la ruta
+        return None
+
     client = get_openai_client()
     sessionId = request.sessionId
     last_response_id = None

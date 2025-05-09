@@ -35,7 +35,7 @@ def get_last_response_id(session_id):
 def validate_secret_key(secret_key):
     """Valida el secretKey en la colección de secrets y devuelve el secretInterno si es válido."""
     collection = get_secrets_collection()
-    secret_doc = collection.find_one({"secret": secret_key, "activo": 1})
+    secret_doc = collection.find_one({"secretInterno": secret_key, "activo": 1})
     
     if secret_doc:
         return {"valid": True, "secretInterno": secret_doc.get("secretInterno")}
