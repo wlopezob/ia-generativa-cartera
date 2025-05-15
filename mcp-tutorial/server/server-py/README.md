@@ -32,3 +32,6 @@ npx @modelcontextprotocol/inspector
 command: uv
 arguments: --directory /home/wlopez/rust/ia-generativa-cartera/mcp-tutorial/server/server-py run server.py
 ```
+uv --directory E:/proyecto/ia-generativa-cartera/mcp-tutorial/server/server-py run server.py
+
+npx @modelcontextprotocol/inspector uv --directory E:/proyecto/ia-generativa-cartera/mcp-tutorial/server/server-py run  server.py
