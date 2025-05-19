@@ -78,6 +78,39 @@ public class MenuServiceImpl implements MenuService {
     public Mono<Void> deleteMenu(String id) {
         return menuRepository.deleteById(id);
     }
+    
+    @Override
+    public Flux<MenuDTO> searchMenusByText(String searchText) {
+        if (searchText == null || searchText.isEmpty()) {
+            return Flux.empty();
+        }
+        
+        // Normalizar y convertir a minúsculas para la búsqueda
+        String normalizedText = searchText.toLowerCase().trim();
+        
+        // Buscar en todos los menús habilitados
+        return menuRepository.findAll()
+                .filter(menu -> Boolean.TRUE.equals(menu.enabled()))
+                .flatMap(menu -> enrichMenuWithDishesAndCulinaryStyle(menu)
+                        .filter(menuDTO -> {
+                            // Verificar si el texto está en el nombre o descripción del menú
+                            boolean matchesMenu = (menuDTO.getName() != null && 
+                                    menuDTO.getName().toLowerCase().contains(normalizedText)) || 
+                                    (menuDTO.getDescription() != null && 
+                                    menuDTO.getDescription().toLowerCase().contains(normalizedText));
+                            
+                            // Verificar si el texto está en alguno de los platos habilitados
+                            boolean matchesDishes = menuDTO.getDishes().stream()
+                                    .filter(dish -> Boolean.TRUE.equals(dish.getEnabled()))
+                                    .anyMatch(dish -> 
+                                        (dish.getName() != null && 
+                                         dish.getName().toLowerCase().contains(normalizedText)) || 
+                                        (dish.getDescripcion() != null && 
+                                         dish.getDescripcion().toLowerCase().contains(normalizedText)));
+                            
+                            return matchesMenu || matchesDishes;
+                        }));
+    }
 
     private Mono<MenuDTO> enrichMenuWithDishesAndCulinaryStyle(Menu menu) {
         MenuDTO menuDTO = menuMapper.toDto(menu);
