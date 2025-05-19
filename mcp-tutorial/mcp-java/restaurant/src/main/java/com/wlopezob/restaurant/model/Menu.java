@@ -8,8 +8,10 @@ import java.util.List;
 @Document(collection = "menus")
 public record Menu(
     @Id String id,
+    String name,
+    String description,
+    String culinaryStyleId,
     List<String> dishesId,
-    String categoryId,
     Integer totalCalories,
     Boolean enabled,
     Double totalPrice

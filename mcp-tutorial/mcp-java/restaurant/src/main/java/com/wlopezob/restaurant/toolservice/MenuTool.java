@@ -17,14 +17,14 @@ public class MenuTool {
 
     private final MenuService menuService;
 
-    @Tool(name = "findAllMenus", description = "Find all menus")
-    public List<MenuDTO> findAllMenus() {
-        return menuService.getAllMenusWithDishes().collectList().block();
+    @Tool(name = "getAllMenusByCulinaryStyleId", description = "Find all menus by culinary style id")
+    public List<MenuDTO> getAllMenusByCulinaryStyleId(@ToolParam(description = "culinaryStyleId") String culinaryStyleId) {
+        return menuService.getAllMenusByCulinaryStyleId(culinaryStyleId).collectList().block();
     }
 
-    @Tool(name = "findAllMenuByCategory", description = "Find all menus by category")
+    /*@Tool(name = "findAllMenuByCategory", description = "Find all menus by category")
     public List<MenuDTO> findAllMenuByCategory(@ToolParam(description = "categoryId") String categoryId) {
-        return menuService.getAllMenusByCategoryId(categoryId).collectList().block();
-    }
+        return menuService.(categoryId).collectList().block();
+    }*/
 
 }

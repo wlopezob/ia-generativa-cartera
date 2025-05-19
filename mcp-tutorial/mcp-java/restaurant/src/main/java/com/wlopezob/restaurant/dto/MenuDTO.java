@@ -13,13 +13,15 @@ import java.util.List;
 @AllArgsConstructor
 public class MenuDTO {
     private String id;
+    private String name;
+    private String description;
+    private String culinaryStyleId;
     private List<String> dishesId;
-    private String categoryId;
     private Integer totalCalories;
     private Boolean enabled;
     private Double totalPrice;
     
     // Datos enriquecidos
     private List<DishDTO> dishes;
-    private CategoryDTO category;
+    private CulinaryStyleDTO culinaryStyle;
 } 

@@ -1,13 +1,13 @@
 package com.wlopezob.restaurant.service.impl;
 
-import com.wlopezob.restaurant.dto.CategoryDTO;
+import com.wlopezob.restaurant.dto.CulinaryStyleDTO;
 import com.wlopezob.restaurant.dto.DishDTO;
 import com.wlopezob.restaurant.dto.MenuDTO;
-import com.wlopezob.restaurant.mapper.CategoryMapper;
+import com.wlopezob.restaurant.mapper.CulinaryStyleMapper;
 import com.wlopezob.restaurant.mapper.DishMapper;
 import com.wlopezob.restaurant.mapper.MenuMapper;
 import com.wlopezob.restaurant.model.Menu;
-import com.wlopezob.restaurant.repository.CategoryRepository;
+import com.wlopezob.restaurant.repository.CulinaryStyleRepository;
 import com.wlopezob.restaurant.repository.DishRepository;
 import com.wlopezob.restaurant.repository.MenuRepository;
 import com.wlopezob.restaurant.service.MenuService;
@@ -16,7 +16,6 @@ import org.springframework.stereotype.Service;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -25,34 +24,34 @@ public class MenuServiceImpl implements MenuService {
 
     private final MenuRepository menuRepository;
     private final DishRepository dishRepository;
-    private final CategoryRepository categoryRepository;
+    private final CulinaryStyleRepository culinaryStyleRepository;
     private final MenuMapper menuMapper;
     private final DishMapper dishMapper;
-    private final CategoryMapper categoryMapper;
+    private final CulinaryStyleMapper culinaryStyleMapper;
 
     @Override
     public Flux<MenuDTO> getAllMenusWithDishes() {
         return menuRepository.findAll()
-                .flatMap(this::enrichMenuWithDishesAndCategory);
+                .flatMap(this::enrichMenuWithDishesAndCulinaryStyle);
     }
 
     @Override
-    public Flux<MenuDTO> getAllMenusByCategoryId(String categoryId) {
-        return menuRepository.findByCategoryId(categoryId)
-                .flatMap(this::enrichMenuWithDishesAndCategory);
+    public Flux<MenuDTO> getAllMenusByCulinaryStyleId(String culinaryStyleId) {
+        return menuRepository.findByCulinaryStyleId(culinaryStyleId)
+                .flatMap(this::enrichMenuWithDishesAndCulinaryStyle);
     }
 
     @Override
     public Mono<MenuDTO> getMenuById(String id) {
         return menuRepository.findById(id)
-                .flatMap(this::enrichMenuWithDishesAndCategory);
+                .flatMap(this::enrichMenuWithDishesAndCulinaryStyle);
     }
 
     @Override
     public Mono<MenuDTO> createMenu(MenuDTO menuDTO) {
         Menu menu = menuMapper.toEntity(menuDTO);
         return menuRepository.save(menu)
-                .flatMap(this::enrichMenuWithDishesAndCategory);
+                .flatMap(this::enrichMenuWithDishesAndCulinaryStyle);
     }
 
     @Override
@@ -62,15 +61,17 @@ public class MenuServiceImpl implements MenuService {
                     Menu updatedMenu = menuMapper.toEntity(menuDTO);
                     updatedMenu = new Menu(
                             existingMenu.id(),
+                            updatedMenu.name(),
+                            updatedMenu.description(),
+                            updatedMenu.culinaryStyleId(),
                             updatedMenu.dishesId(),
-                            updatedMenu.categoryId(),
                             updatedMenu.totalCalories(),
                             updatedMenu.enabled(),
                             updatedMenu.totalPrice()
                     );
                     return menuRepository.save(updatedMenu);
                 })
-                .flatMap(this::enrichMenuWithDishesAndCategory);
+                .flatMap(this::enrichMenuWithDishesAndCulinaryStyle);
     }
 
     @Override
@@ -78,32 +79,21 @@ public class MenuServiceImpl implements MenuService {
         return menuRepository.deleteById(id);
     }
 
-    private Mono<MenuDTO> enrichMenuWithDishesAndCategory(Menu menu) {
+    private Mono<MenuDTO> enrichMenuWithDishesAndCulinaryStyle(Menu menu) {
         MenuDTO menuDTO = menuMapper.toDto(menu);
         
-        // Enriquecer con la categoría
-        Mono<CategoryDTO> categoryMono = categoryRepository.findById(menu.categoryId())
-                .map(categoryMapper::toDto)
-                .defaultIfEmpty(null);
+        // Enriquecer con el estilo culinario
+        Mono<CulinaryStyleDTO> culinaryStyleMono = culinaryStyleRepository.findById(menu.culinaryStyleId())
+                .map(culinaryStyleMapper::toDto)
+                .defaultIfEmpty(new CulinaryStyleDTO());
         
         // Enriquecer con los platos
         Flux<DishDTO> dishesMono = Flux.fromIterable(menu.dishesId())
                 .flatMap(dishId -> dishRepository.findById(dishId)
-                        .flatMap(dish -> {
-                            DishDTO dishDTO = dishMapper.toDto(dish);
-                            return categoryRepository.findById(dish.categoryId())
-                                    .map(categoryMapper::toDto)
-                                    .map(categoryDTO -> {
-                                        dishDTO.setCategory(categoryDTO);
-                                        return dishDTO;
-                                    })
-                                    .defaultIfEmpty(dishDTO);
-                        }))
-                .collectList()
-                .flatMapMany(Flux::fromIterable);
+                        .map(dishMapper::toDto));
         
-        return Mono.zip(categoryMono, dishesMono.collectList(), (category, dishes) -> {
-            menuDTO.setCategory(category);
+        return Mono.zip(culinaryStyleMono, dishesMono.collectList(), (culinaryStyle, dishes) -> {
+            menuDTO.setCulinaryStyle(culinaryStyle);
             menuDTO.setDishes(dishes);
             return menuDTO;
         });

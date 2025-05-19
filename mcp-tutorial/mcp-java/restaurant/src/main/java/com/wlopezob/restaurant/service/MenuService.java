@@ -6,7 +6,7 @@ import reactor.core.publisher.Mono;
 
 public interface MenuService {
     Flux<MenuDTO> getAllMenusWithDishes();
-    Flux<MenuDTO> getAllMenusByCategoryId(String categoryId);
+    Flux<MenuDTO> getAllMenusByCulinaryStyleId(String culinaryStyleId);
     Mono<MenuDTO> getMenuById(String id);
     Mono<MenuDTO> createMenu(MenuDTO menuDTO);
     Mono<MenuDTO> updateMenu(String id, MenuDTO menuDTO);

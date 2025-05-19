@@ -1,0 +1,11 @@
+_id,menusId,extraDishesId,totalPrice,enabled
+682b212b0dfba7ca50e67fe3,"[""682b212b0dfba7ca50e67fd9"",""682b212b0dfba7ca50e67fdd""]","[""682b212b0dfba7ca50e67fd0""]",115.70,true
+682b212b0dfba7ca50e67fe4,"[""682b212b0dfba7ca50e67fda"",""682b212b0dfba7ca50e67fde""]","[""682b212b0dfba7ca50e67fcf""]",100.30,true
+682b212b0dfba7ca50e67fe5,"[""682b212b0dfba7ca50e67fdb"",""682b212b0dfba7ca50e67fdf""]","[""682b212b0dfba7ca50e67fd1""]",146.50,true
+682b212b0dfba7ca50e67fe6,"[""682b212b0dfba7ca50e67fdc"",""682b212b0dfba7ca50e67fe0""]","[""682b212b0dfba7ca50e67fd2""]",182.10,true
+682b212b0dfba7ca50e67fe7,"[""682b212b0dfba7ca50e67fd9"",""682b212b0dfba7ca50e67fe1""]","[]",141.60,true
+682b212b0dfba7ca50e67fe8,"[""682b212b0dfba7ca50e67fda"",""682b212b0dfba7ca50e67fe2""]","[]",142.20,true
+682b212b0dfba7ca50e67fe9,"[""682b212b0dfba7ca50e67fdb"",""682b212b0dfba7ca50e67fdd""]","[""682b212b0dfba7ca50e67fd5"",""682b212b0dfba7ca50e67fd6""]",127.60,true
+682b212b0dfba7ca50e67fea,"[""682b212b0dfba7ca50e67fdc"",""682b212b0dfba7ca50e67fde""]","[""682b212b0dfba7ca50e67fd8"",""682b212b0dfba7ca50e67fd3""]",124.80,true
+682b212b0dfba7ca50e67feb,"[""682b212b0dfba7ca50e67fd9"",""682b212b0dfba7ca50e67fe0""]","[""682b212b0dfba7ca50e67fd4""]",122.10,true
+682b212b0dfba7ca50e67fec,"[""682b212b0dfba7ca50e67fdb"",""682b212b0dfba7ca50e67fe2""]","[""682b212b0dfba7ca50e67fd7"",""682b212b0dfba7ca50e67fd0""]",178.20,true 

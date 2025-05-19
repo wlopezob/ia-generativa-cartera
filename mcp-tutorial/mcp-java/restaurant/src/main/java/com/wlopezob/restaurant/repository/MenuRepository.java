@@ -7,5 +7,5 @@ import reactor.core.publisher.Flux;
 
 @Repository
 public interface MenuRepository extends ReactiveMongoRepository<Menu, String> {
-    Flux<Menu> findByCategoryId(String categoryId);
+    Flux<Menu> findByCulinaryStyleId(String culinaryStyleId);
 } 
