@@ -1,0 +1,39 @@
+spring:
+  application:
+    name: ux-api-restaurant
+  ai:
+    openai:
+      api-key: ${OPENAI_API_KEY}
+      chat:
+        options:
+          model: gpt-4o
+    retry:
+      max-attempts: 3
+      backoff:
+        initial-interval: 2s
+        multiplier: 2
+        max-interval: 30s
+    mcp:
+      client:
+        type: ASYNC
+        request-timeout: 60s
+        sse:
+          connections:
+            mcp-server-restaurant:
+              url: http://localhost:8080
+        toolcallback:
+          enabled: true
+
+server:
+  port: 8081
+
+logging:
+  level:
+    io:
+      modelcontextprotocol:
+        client: WARN
+        spec: WARN
+    org:
+      springframework:
+        ai: DEBUG
+    root: INFO
