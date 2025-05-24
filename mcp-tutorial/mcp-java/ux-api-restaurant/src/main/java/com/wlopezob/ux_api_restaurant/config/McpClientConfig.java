@@ -1,10 +1,9 @@
 package com.wlopezob.ux_api_restaurant.config;
 
-import org.springframework.boot.web.client.ClientHttpRequestFactories;
-import org.springframework.boot.web.client.ClientHttpRequestFactorySettings;
+import org.springframework.boot.web.client.RestClientCustomizer;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.web.client.RestClient;
+import org.springframework.http.client.SimpleClientHttpRequestFactory;
 
 import java.time.Duration;
 
@@ -12,16 +11,16 @@ import java.time.Duration;
 public class McpClientConfig {
 
     @Bean
-    public RestClient.Builder restClientCustomizer() {
-        System.out.println("Configurando OpenAI client con timeouts extendidos");
-        
-        ClientHttpRequestFactorySettings settings = new ClientHttpRequestFactorySettings(
-                Duration.ofSeconds(60),
-                Duration.ofSeconds(120),
-                null
-        );
-        
-        return RestClient.builder()
-                .requestFactory(ClientHttpRequestFactories.get(settings));
+    public RestClientCustomizer restClientCustomizer() {
+        return restClientBuilder -> {
+            System.out.println("Configurando OpenAI client con timeouts extendidos");
+            
+            // Configurar factory con timeouts personalizados
+            SimpleClientHttpRequestFactory factory = new SimpleClientHttpRequestFactory();
+            factory.setConnectTimeout(Duration.ofSeconds(60));
+            factory.setReadTimeout(Duration.ofSeconds(120));
+            
+            restClientBuilder.requestFactory(factory);
+        };
     }
 } 
