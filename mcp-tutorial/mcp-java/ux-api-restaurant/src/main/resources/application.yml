@@ -60,6 +60,19 @@ spring:
 server:
   port: 8081
 
+springdoc:
+  info:
+    version: '@project.version@'
+    title: '@project.artifactId@'
+    description: '@project.description@'
+    servers:
+      - 'http://localhost:8082/'
+      - 'http://localhost/'
+  api-docs:
+    path: /openapi
+    yaml:
+      enabled: true    
+
 # Configuración de logging
 logging:
   level:

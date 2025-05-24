@@ -25,8 +25,8 @@ public class RestaurantController {
     private final ApplicationInfoService applicationInfoService;
 
     public RestaurantController(ChatService chatService,
-                              ChatMemoryService chatMemoryService,
-                              ApplicationInfoService applicationInfoService) {
+            ChatMemoryService chatMemoryService,
+            ApplicationInfoService applicationInfoService) {
         this.chatService = chatService;
         this.chatMemoryService = chatMemoryService;
         this.applicationInfoService = applicationInfoService;
@@ -63,8 +63,8 @@ public class RestaurantController {
      * Endpoint para crear una nueva sesión de chat
      */
     @PostMapping(value = "/sessions", produces = MediaType.APPLICATION_JSON_VALUE)
-    public Mono<SessionResponse> createSession(@RequestParam String userId, 
-                                             @RequestParam String sessionName) {
+    public Mono<SessionResponse> createSession(@RequestParam String userId,
+            @RequestParam String sessionName) {
         log.info("Creando sesión para usuario: {} con nombre: {}", userId, sessionName);
         return chatMemoryService.createSession(userId, sessionName);
     }
@@ -111,4 +111,4 @@ public class RestaurantController {
     public Mono<InfoResponse> info() {
         return applicationInfoService.getInfo();
     }
-} 
+}
