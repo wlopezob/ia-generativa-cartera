@@ -22,7 +22,7 @@ public class MenuTool {
         return menuService.getAllMenusByCulinaryStyleId(culinaryStyleId).collectList().block();
     }
 
-    @Tool(name = "getAllMenus", description = "Find all menus")
+    @Tool(name = "getAllMenus", description = "Search menus and dishes available in the restaurant")
     public List<MenuDTO> getAllMenus() {
         return menuService.getAllMenusWithDishes().collectList().block();
     }
@@ -32,9 +32,9 @@ public class MenuTool {
         return menuService.getMenuById(id).block();
     }
 
-    @Tool(name = "searchMenusByText", description = "Search menus and dishes by text in name or description")
+    /*@Tool(name = "searchMenusByText", description = "Search menus and dishes by text in name or description")
     public List<MenuDTO> searchMenusByText(@ToolParam(description = "text to search in menu or dish name/description") String searchText) {
         return menuService.searchMenusByText(searchText).collectList().block();
-    }
+    }*/
 
 }

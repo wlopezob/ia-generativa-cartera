@@ -1,12 +1,44 @@
 spring:
   application:
     name: ux-api-restaurant
+  
+  # Configuración de PostgreSQL
+  datasource:
+    url: jdbc:postgresql://localhost:5432/restaurant_chat
+    username: postgres
+    password: postgres
+    driver-class-name: org.postgresql.Driver
+    hikari:
+      maximum-pool-size: 20
+      minimum-idle: 5
+      connection-timeout: 30000
+      idle-timeout: 600000
+      max-lifetime: 1800000
+  
+  # Configuración JPA/Hibernate
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: false
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.PostgreSQLDialect
+        format_sql: true
+        jdbc:
+          time_zone: UTC
+        temp:
+          use_jdbc_metadata_defaults: false
+    open-in-view: false
+  
+  # Configuración de Spring AI
   ai:
     openai:
       api-key: ${OPENAI_API_KEY}
       chat:
         options:
-          model: gpt-4.1
+          model: gpt-4o
+          tool-choice: auto
+          parallel-tool-calls: true
     retry:
       max-attempts: 3
       backoff:
@@ -24,16 +56,27 @@ spring:
         toolcallback:
           enabled: true
 
+# Configuración del servidor
 server:
   port: 8081
 
+# Configuración de logging
 logging:
   level:
-    io:
-      modelcontextprotocol:
-        client: WARN
-        spec: WARN
-    org:
-      springframework:
-        ai: DEBUG
+    com.wlopezob.ux_api_restaurant: INFO
+    org.springframework.ai: DEBUG
+    org.hibernate.SQL: DEBUG
+    org.hibernate.type.descriptor.sql.BasicBinder: TRACE
+    io.modelcontextprotocol.client: WARN
+    io.modelcontextprotocol.spec: WARN
     root: INFO
+  pattern:
+    console: "%d{yyyy-MM-dd HH:mm:ss} - %msg%n"
+    file: "%d{yyyy-MM-dd HH:mm:ss} [%thread] %-5level %logger{36} - %msg%n"
+
+# Configuración personalizada de la aplicación
+app:
+  chat:
+    max-sessions-per-user: 50
+    max-messages-per-session: 1000
+    session-timeout-days: 30
