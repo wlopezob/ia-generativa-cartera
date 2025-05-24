@@ -26,7 +26,7 @@ import java.util.UUID;
 public class ChatSession {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.UUID)
+    @Column(name = "id", updatable = false, nullable = false)
     private UUID id;
 
     @Column(name = "user_id", nullable = false)
@@ -53,9 +53,18 @@ public class ChatSession {
 
     // Constructor personalizado para compatibilidad
     public ChatSession(String userId, String sessionName) {
+        this.id = UUID.randomUUID(); // Generar UUID si no se proporciona
         this.userId = userId;
         this.sessionName = sessionName;
         this.isActive = true;
         this.messages = new ArrayList<>();
+    }
+
+    // Método para asegurar que siempre hay un ID
+    @PrePersist
+    public void ensureId() {
+        if (this.id == null) {
+            this.id = UUID.randomUUID();
+        }
     }
 } 

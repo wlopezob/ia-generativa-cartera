@@ -4,6 +4,7 @@ import com.wlopezob.ux_api_restaurant.dto.*;
 import com.wlopezob.ux_api_restaurant.service.ApplicationInfoService;
 import com.wlopezob.ux_api_restaurant.service.ChatMemoryService;
 import com.wlopezob.ux_api_restaurant.service.ChatService;
+import jakarta.validation.Valid;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
@@ -52,10 +53,12 @@ public class RestaurantController {
 
     /**
      * Endpoint para chat con memoria de sesión
+     * El sessionId es obligatorio y si no existe se crea automáticamente
      */
     @PostMapping(value = "/chat/memory", produces = MediaType.APPLICATION_JSON_VALUE)
-    public Mono<ChatResponse> chatWithMemory(@RequestBody ChatWithMemoryRequest request) {
-        log.info("Procesando chat con memoria para usuario: {}", request.userId());
+    public Mono<ChatResponse> chatWithMemory(@Valid @RequestBody ChatWithMemoryRequest request) {
+        log.info("Procesando chat con memoria para sessionId: {} y usuario: {}", 
+                request.sessionId(), request.userId());
         return chatMemoryService.processChatWithMemory(request);
     }
 

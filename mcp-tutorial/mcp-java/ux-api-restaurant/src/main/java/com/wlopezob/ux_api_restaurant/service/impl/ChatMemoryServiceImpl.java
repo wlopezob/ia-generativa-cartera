@@ -56,39 +56,41 @@ public class ChatMemoryServiceImpl implements ChatMemoryService {
 
     /**
      * Procesa un chat con memoria de sesión usando MapStruct
+     * El sessionId es obligatorio y si no existe se crea automáticamente
      */
     @Override
     @Transactional
     public Mono<ChatResponse> processChatWithMemory(ChatWithMemoryRequest request) {
         return Mono.fromCallable(() -> {
-            log.info("Procesando chat con memoria para usuario: {}", request.userId());
-
-            // Obtener o crear sesión
-            ChatSession session = getOrCreateSession(request);
-
+            log.info("Procesando chat con memoria para sessionId: {} y usuario: {}", 
+                    request.sessionId(), request.userId());
+            
+            // Obtener o crear sesión usando el sessionId del request
+            ChatSession session = getOrCreateSessionById(request);
+            
             // Crear y guardar mensaje del usuario usando MapStruct
             ChatMessage userMessage = messageMapper.createUserMessage(session, request.message());
             messageRepository.save(userMessage);
-
+            
             // Obtener contexto de mensajes anteriores
             String contextualPrompt = buildContextualPrompt(session.getId(), request.message());
-
+            
             // Generar respuesta
             String response = chatClient.prompt()
                     .user(contextualPrompt)
                     .call()
                     .content();
-
+            
             // Crear y guardar respuesta del asistente usando MapStruct
             ChatMessage assistantMessage = messageMapper.createAssistantMessage(session, response);
             messageRepository.save(assistantMessage);
-
+            
             log.info("Chat procesado exitosamente para sesión: {}", session.getId());
-
+            
             // Crear respuesta usando MapStruct
             return responseMapper.createChatResponse(response, session.getId());
         })
-                .subscribeOn(Schedulers.boundedElastic());
+        .subscribeOn(Schedulers.boundedElastic());
     }
 
     /**
@@ -172,19 +174,28 @@ public class ChatMemoryServiceImpl implements ChatMemoryService {
     }
 
     /**
-     * Obtiene o crea una sesión según la solicitud usando MapStruct
+     * Obtiene o crea una sesión usando el sessionId del request
+     * Si la sesión no existe, la crea con el sessionId proporcionado
      */
-    private ChatSession getOrCreateSession(ChatWithMemoryRequest request) {
-        if (request.sessionId() != null) {
-            return sessionRepository.findById(request.sessionId())
-                    .orElseThrow(() -> new IllegalArgumentException("Sesión no encontrada: " + request.sessionId()));
-        } else if (request.userId() != null && request.sessionName() != null) {
-            // Usar MapStruct para crear la sesión
-            ChatSession session = sessionMapper.toEntity(request);
-            return sessionRepository.save(session);
-        } else {
-            throw new IllegalArgumentException("Debe proporcionar sessionId o userId+sessionName");
-        }
+    private ChatSession getOrCreateSessionById(ChatWithMemoryRequest request) {
+        UUID sessionId = request.sessionId();
+        
+        // Buscar sesión existente por ID
+        return sessionRepository.findById(sessionId)
+                .orElseGet(() -> {
+                    log.info("Sesión {} no encontrada, creando nueva sesión para usuario: {}", 
+                            sessionId, request.userId());
+                    
+                    // Crear nueva sesión con el ID específico
+                    ChatSession newSession = ChatSession.builder()
+                            .id(sessionId)  // Usar el ID proporcionado
+                            .userId(request.userId())
+                            .sessionName(request.sessionName())
+                            .isActive(true)
+                            .build();
+                    
+                    return sessionRepository.save(newSession);
+                });
     }
 
     /**
