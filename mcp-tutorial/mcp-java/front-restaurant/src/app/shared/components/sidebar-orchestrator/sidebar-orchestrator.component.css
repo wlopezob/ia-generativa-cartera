@@ -1,0 +1,67 @@
+/* Base container styles */
+:host {
+  display: block;
+  position: relative;
+}
+
+/* Sidebar container - fixed position prevents layout shifts */
+.sidebar-container {
+  position: fixed;
+  top: 0;
+  left: 0;
+  height: 100%;
+  width: 320px;
+  background-color: white;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+  z-index: 20;
+  will-change: transform;
+  overflow: hidden;
+  transform: translateZ(0); /* Force hardware acceleration */
+  backface-visibility: hidden; /* Prevent flickering */
+  perspective: 1000; /* Improves performance */
+}
+
+/* Isolate the transform property for better performance */
+.sidebar-container {
+  transform: translateX(0);
+}
+
+/* Overlay for mobile */
+.sidebar-overlay {
+  position: fixed;
+  inset: 0;
+  background-color: rgba(0, 0, 0, 0.5);
+  z-index: 10;
+  backdrop-filter: blur(4px);
+  will-change: opacity;
+  transform: translateZ(0); /* Force hardware acceleration */
+  backface-visibility: hidden; /* Prevent flickering */
+}
+
+/* Mobile toggle button */
+.mobile-toggle-button {
+  position: fixed;
+  left: 1rem;
+  top: 1rem;
+  z-index: 30;
+  background-color: rgb(37, 99, 235);
+  color: white;
+  border-radius: 9999px;
+  width: 2.5rem;
+  height: 2.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06);
+}
+
+.mobile-toggle-button:hover {
+  background-color: rgb(29, 78, 216);
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .sidebar-container {
+    width: 100%;
+  }
+} 

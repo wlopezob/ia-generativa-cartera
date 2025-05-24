@@ -1,0 +1,40 @@
+<div class="flex flex-col h-full bg-blue-50">
+  <!-- Indicador de depuración (quitar en producción) -->
+  <div class="bg-gray-100 text-xs text-gray-500 px-2 py-1 text-center md:text-left" *ngIf="sessionId">
+    Session ID: {{ sessionId.slice(0, 8) }}...
+  </div>
+  
+  <div class="flex-1 overflow-y-auto p-3 md:p-6 space-y-4">
+    @if (messages.length === 0) {
+      <div class="flex items-center justify-center h-full text-gray-400 text-center">
+        <div>
+          <svg class="w-16 h-16 mx-auto text-gray-300 mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M8 10h.01M12 10h.01M16 10h.01M9 16H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-5l-5 5v-5z"></path>
+          </svg>
+          <p class="text-lg">No hay mensajes en esta sala</p>
+          <p class="text-sm mt-2">Escribe tu primera consulta abajo</p>
+        </div>
+      </div>
+    }
+    
+    @for (msg of messages; let i = $index; track i) {
+      <app-message-card [message]="msg"></app-message-card>
+    }
+    
+    @if (isLoading) {
+      <div class="flex items-center space-x-2 text-gray-500 animate-pulse">
+        <div class="w-2 h-2 bg-gray-400 rounded-full"></div>
+        <div class="w-2 h-2 bg-gray-400 rounded-full animation-delay-200"></div>
+        <div class="w-2 h-2 bg-gray-400 rounded-full animation-delay-400"></div>
+        <span class="text-sm ml-2">ChefAPP está escribiendo...</span>
+      </div>
+    }
+  </div>
+  
+  <div class="border-t bg-white p-3 md:p-4">
+    <app-message-input 
+      [isLoading]="isLoading" 
+      (send)="addMessage($event)">
+    </app-message-input>
+  </div>
+</div>

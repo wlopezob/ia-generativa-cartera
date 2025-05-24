@@ -1,0 +1,35 @@
+/* Room tabs scrollbar styling */
+.flex.space-x-2.overflow-x-auto {
+  scrollbar-width: thin;
+  scrollbar-color: #cbd5e0 #f8fafc;
+}
+
+.flex.space-x-2.overflow-x-auto::-webkit-scrollbar {
+  height: 6px;
+}
+
+.flex.space-x-2.overflow-x-auto::-webkit-scrollbar-track {
+  background: #f8fafc;
+}
+
+.flex.space-x-2.overflow-x-auto::-webkit-scrollbar-thumb {
+  background-color: #cbd5e0;
+  border-radius: 6px;
+}
+
+/* Animation for the loading indicator */
+@keyframes pulse {
+  0% {
+    opacity: 0.5;
+  }
+  50% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0.5;
+  }
+}
+
+.animate-pulse {
+  animation: pulse 1.5s ease-in-out infinite;
+} 

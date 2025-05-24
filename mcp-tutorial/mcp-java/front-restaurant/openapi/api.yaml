@@ -1,0 +1,228 @@
+openapi: 3.0.4
+info:
+  title: ux-api-restaurant
+  description: Demo project for Spring Boot
+  version: 0.0.1-SNAPSHOT
+servers:
+  - url: http://localhost:8082/
+  - url: http://localhost/
+paths:
+  /api/restaurant/sessions/{sessionId}/deactivate:
+    put:
+      tags:
+        - restaurant-controller
+      operationId: deactivateSession
+      parameters:
+        - name: sessionId
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        '200':
+          description: OK
+  /api/restaurant/sessions:
+    post:
+      tags:
+        - restaurant-controller
+      operationId: createSession
+      parameters:
+        - name: userId
+          in: query
+          required: true
+          schema:
+            type: string
+        - name: sessionName
+          in: query
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SessionResponse'
+  /api/restaurant/chat/memory:
+    post:
+      tags:
+        - restaurant-controller
+      operationId: chatWithMemory
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ChatWithMemoryRequest'
+        required: true
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ChatResponse'
+  /api/restaurant/chat/advanced:
+    post:
+      tags:
+        - restaurant-controller
+      operationId: chatAdvanced
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AdvancedChatRequest'
+        required: true
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ChatResponse'
+  /api/restaurant/chat:
+    post:
+      tags:
+        - restaurant-controller
+      operationId: chat
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ChatRequest'
+        required: true
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ChatResponse'
+  /api/restaurant/sessions/{userId}:
+    get:
+      tags:
+        - restaurant-controller
+      operationId: getUserSessions
+      parameters:
+        - name: userId
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/SessionResponse'
+  /api/restaurant/info:
+    get:
+      tags:
+        - restaurant-controller
+      operationId: info
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InfoResponse'
+  /api/restaurant/health:
+    get:
+      tags:
+        - restaurant-controller
+      operationId: health
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HealthResponse'
+  /api/restaurant/sessions/{sessionId}:
+    delete:
+      tags:
+        - restaurant-controller
+      operationId: deleteSession
+      parameters:
+        - name: sessionId
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        '200':
+          description: OK
+components:
+  schemas:
+    SessionResponse:
+      type: object
+      properties:
+        sessionId:
+          type: string
+          format: uuid
+        sessionName:
+          type: string
+        userId:
+          type: string
+        createdAt:
+          type: string
+          format: date-time
+        updatedAt:
+          type: string
+          format: date-time
+        messageCount:
+          type: integer
+          format: int32
+    ChatWithMemoryRequest:
+      type: object
+      properties:
+        message:
+          type: string
+        sessionId:
+          type: string
+          format: uuid
+        userId:
+          type: string
+        sessionName:
+          type: string
+    ChatResponse:
+      type: object
+      properties:
+        response:
+          type: string
+        sessionId:
+          type: string
+    AdvancedChatRequest:
+      type: object
+      properties:
+        message:
+          type: string
+        context:
+          type: string
+    ChatRequest:
+      type: object
+      properties:
+        message:
+          type: string
+    InfoResponse:
+      type: object
+      properties:
+        name:
+          type: string
+        description:
+          type: string
+        version:
+          type: string
+    HealthResponse:
+      type: object
+      properties:
+        status:
+          type: string
+        message:
+          type: string

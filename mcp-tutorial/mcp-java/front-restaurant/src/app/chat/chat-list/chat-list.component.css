@@ -1,0 +1,59 @@
+.bg-gray-50 {
+  background-color: #f9fafb;
+}
+
+.hover\:bg-gray-100:hover {
+  background-color: #f3f4f6;
+}
+
+button.text-gray-400 {
+  transition: all 0.2s ease;
+  opacity: 0.8;
+}
+
+button.hover\:text-red-500:hover {
+  color: #ef4444;
+  opacity: 1;
+}
+
+/* Verified badge styling */
+.text-blue-500 {
+  color: #3b82f6;
+}
+
+/* Add subtle transition effect */
+.flex.items-center.justify-between {
+  transition: background-color 0.15s ease;
+}
+
+/* Add subtle shadow to the avatar */
+.w-10.h-10.rounded-full {
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+}
+
+/* Text colors */
+.text-gray-900 {
+  color: #111827;
+}
+
+.text-gray-500 {
+  color: #6b7280;
+}
+
+.text-gray-400 {
+  color: #9ca3af;
+}
+
+.font-medium {
+  font-weight: 500;
+}
+
+.text-sm {
+  font-size: 0.875rem;
+  line-height: 1.25rem;
+}
+
+.text-xs {
+  font-size: 0.75rem;
+  line-height: 1rem;
+}

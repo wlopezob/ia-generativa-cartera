@@ -1,0 +1,60 @@
+<div class="flex flex-col h-full">
+  <div class="flex items-center space-x-2 p-2 bg-white border-b relative">
+    <div class="flex space-x-2 overflow-x-auto">
+      @for (room of rooms; track room.uuid; let i = $index) {
+        <div class="flex items-center bg-blue-100 rounded px-3 py-1 mr-2" [class.bg-blue-300]="i === activeRoomIndex">
+          <button (click)="setActiveRoom(i)" class="font-semibold text-blue-800 focus:outline-none">
+            Sala {{ room.uuid.slice(0, 8) }}
+            @if (room.isLoading) {
+              <span class="ml-1 inline-block w-2 h-2 bg-yellow-500 rounded-full animate-pulse"></span>
+            }
+          </button>
+          <button (click)="removeRoom(i)" class="ml-2 text-red-500 hover:text-red-700 rounded-full w-7 h-7 flex items-center justify-center relative group" title="Eliminar sala">
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"/>
+            </svg>
+            <span class="absolute opacity-0 group-hover:opacity-100 bg-gray-800 text-white text-xs rounded px-2 py-1 left-8 transition-opacity pointer-events-none z-10">
+              Eliminar sala
+            </span>
+          </button>
+        </div>
+      }
+    </div>
+    <button
+      (click)="addRoom()"
+      class="ml-4 bg-blue-600 hover:bg-blue-700 text-white rounded-full w-10 h-10 flex items-center justify-center shadow group relative"
+      title="Agregar sala"
+    >
+      <svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" d="M12 4v16m8-8H4"/>
+      </svg>
+      <span class="absolute opacity-0 group-hover:opacity-100 bg-gray-800 text-white text-xs rounded px-2 py-1 left-12 transition-opacity pointer-events-none z-10">
+        Agregar sala
+      </span>
+    </button>
+  </div>
+  <div class="flex-1">
+    @if (rooms.length > 0) {
+      <app-chat-window 
+        [messages]="rooms[activeRoomIndex].messages" 
+        [sessionId]="rooms[activeRoomIndex].uuid"
+        [isLoading]="rooms[activeRoomIndex]?.isLoading || false"
+        (send)="handleSendMessage($event)">
+      </app-chat-window>
+    }
+    @if (rooms.length === 0) {
+      <div class="flex items-center justify-center h-full text-gray-400">No hay salas abiertas</div>
+    }
+  </div>
+
+  <!-- Confirm Delete Modal -->
+  <app-confirm-modal
+    [isVisible]="showDeleteConfirmModal"
+    title="Eliminar sala"
+    message="¿Está seguro que desea eliminar esta sala? Esta acción no se puede deshacer."
+    confirmButtonText="Eliminar"
+    cancelButtonText="Cancelar"
+    (confirm)="deleteRoomConfirmed()"
+    (cancel)="cancelDeleteRoom()">
+  </app-confirm-modal>
+</div> 
