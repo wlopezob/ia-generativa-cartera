@@ -1,0 +1,13 @@
+[project]
+name = "vertexai"
+version = "0.1.0"
+description = "Add your description here"
+readme = "README.md"
+requires-python = ">=3.13"
+dependencies = [
+    "gitpython>=3.1.44",
+    "google-cloud-aiplatform>=1.95.0",
+    "google-cloud-storage>=2.19.0",
+    "google-genai>=1.17.0",
+    "pip>=25.1.1",
+]
