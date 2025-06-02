@@ -1,0 +1,12 @@
+[project]
+name = "rag"
+version = "0.1.0"
+description = "Add your description here"
+readme = "README.md"
+requires-python = ">=3.13"
+dependencies = [
+    "google-adk>=1.1.1",
+    "google-cloud-aiplatform[adk,agent-engines]>=1.95.1",
+    "google-cloud-storage>=2.19.0",
+    "pip>=25.1.1",
+]
