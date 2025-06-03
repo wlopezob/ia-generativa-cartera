@@ -1,0 +1,135 @@
+.bg-blue-50 {
+  background-color: #eff6ff;
+}
+
+.divide-y > div:hover:not(.bg-blue-50) {
+  background-color: #f9fafb;
+}
+
+h3.uppercase {
+  font-size: 0.85rem;
+  letter-spacing: 0.05em;
+  color: #6b7280;
+}
+
+.text-gray-500 {
+  color: #6b7280;
+}
+
+.text-gray-400 {
+  color: #9ca3af;
+}
+
+.text-gray-900 {
+  color: #111827;
+}
+
+.font-medium {
+  font-weight: 500;
+}
+
+/* Make sure the button is visible by default but subtle */
+button.text-gray-400 {
+  opacity: 0.7;
+}
+
+button.text-gray-400:hover {
+  opacity: 1;
+}
+
+button.hover\:text-red-500:hover {
+  color: #ef4444;
+}
+
+/* Add subtle transition effect */
+.flex.items-center {
+  transition: background-color 0.15s ease;
+}
+
+/* Styling for the chat room avatar placeholder */
+.w-10.h-10.rounded-full.flex.items-center.justify-center {
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+}
+
+.bg-blue-100 {
+  background-color: #e0f2fe;
+}
+
+.text-blue-600 {
+  color: #2563eb;
+}
+
+/* Estilos para el sidebar */
+:host {
+  display: block;
+  height: 100%;
+}
+
+.sidebar-header {
+  position: sticky;
+  top: 0;
+  z-index: 10;
+  background-color: white;
+}
+
+/* Estilos para la lista de salas */
+.room-list {
+  padding-top: 4px;
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+}
+
+/* Animaciones para elementos del sidebar */
+.room-item {
+  transition: background-color 0.2s ease;
+}
+
+.room-item:hover {
+  background-color: rgba(59, 130, 246, 0.05);
+}
+
+.room-item.active {
+  background-color: rgba(59, 130, 246, 0.1);
+  border-left: 3px solid rgba(59, 130, 246, 0.8);
+}
+
+/* Estilo para nombres largos */
+.truncate {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* Animación para el indicador de carga */
+.loading-indicator {
+  animation: pulse 1.5s infinite ease-in-out;
+}
+
+@keyframes pulse {
+  0%, 100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 0.5;
+    transform: scale(1.1);
+  }
+}
+
+/* Estilo para lista vacía */
+.empty-state {
+  opacity: 0.7;
+  transition: opacity 0.3s ease;
+}
+
+.empty-state:hover {
+  opacity: 1;
+}
+
+/* Mejoras para dispositivos móviles */
+@media (max-width: 768px) {
+  .room-list {
+    max-height: calc(100vh - 120px);
+  }
+}

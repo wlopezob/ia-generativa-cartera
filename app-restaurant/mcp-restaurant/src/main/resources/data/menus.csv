@@ -1,0 +1,11 @@
+_id,name,description,culinaryStyleId,dishesId,totalCalories,enabled,totalPrice
+682b212b0dfba7ca50e67fd9,Carta Criolla,Selección de platos tradicionales peruanos,683c1e890dfba7ca50e67fe1,"[""682b212b0dfba7ca50e67fcb"",""682b212b0dfba7ca50e67fd3"",""682b212b0dfba7ca50e67fcd""]",1180,true,54.30
+682b212b0dfba7ca50e67fda,Carta Fusión,Mezcla de sabores internacionales con toques peruanos,683c1e890dfba7ca50e67fe5,"[""682b212b0dfba7ca50e67fcb"",""682b212b0dfba7ca50e67fd4"",""682b212b0dfba7ca50e67fce""]",964,true,51.90
+682b212b0dfba7ca50e67fdb,Carta Andina,Sabores tradicionales de los Andes peruanos,683c1e890dfba7ca50e67fe7,"[""682b212b0dfba7ca50e67fcc"",""682b212b0dfba7ca50e67fd5"",""682b212b0dfba7ca50e67fd6""]",1050,true,55.30
+682b212b0dfba7ca50e67fdc,Carta Ligera,Menú balanceado con platos de temporada,683c1e890dfba7ca50e67fe4,"[""682b212b0dfba7ca50e67fcc"",""682b212b0dfba7ca50e67fcf"",""682b212b0dfba7ca50e67fd7""]",990,true,52.90
+682b212b0dfba7ca50e67fdd,Carta Nikkei,Fusión de cocina japonesa y peruana,683c1e890dfba7ca50e67fe2,"[""682b212b0dfba7ca50e67fc9"",""682b212b0dfba7ca50e67fd3"",""682b212b0dfba7ca50e67fce""]",950,true,45.90
+682b212b0dfba7ca50e67fde,Carta Mediterránea,Sabores frescos del mediterráneo,683c1e890dfba7ca50e67fe3,"[""682b212b0dfba7ca50e67fca"",""682b212b0dfba7ca50e67fd4"",""682b212b0dfba7ca50e67fcd""]",870,true,38.90
+682b212b0dfba7ca50e67fdf,Carta Marina,Selección de platos con mariscos y pescados frescos,683c1e890dfba7ca50e67fe6,"[""682b212b0dfba7ca50e67fcb"",""682b212b0dfba7ca50e67fd8"",""682b212b0dfba7ca50e67fcd""]",1320,true,68.70
+682b212b0dfba7ca50e67fe0,Carta Internacional,Mejores platos de la gastronomía mundial,683c1e890dfba7ca50e67fe8,"[""682b212b0dfba7ca50e67fcc"",""682b212b0dfba7ca50e67fd6"",""682b212b0dfba7ca50e67fce""]",1250,true,63.30
+682b212b0dfba7ca50e67fe1,Carta Parrillera,Selección de las mejores carnes a la parrilla,683c1e890dfba7ca50e67fe1,"[""682b212b0dfba7ca50e67fd2"",""682b212b0dfba7ca50e67fd3"",""682b212b0dfba7ca50e67fcd""]",1450,true,87.30
+682b212b0dfba7ca50e67fe2,Carta Ejecutiva,Menú especial para almuerzos de negocio,683c1e890dfba7ca50e67fe8,"[""682b212b0dfba7ca50e67fd2"",""682b212b0dfba7ca50e67fd5"",""682b212b0dfba7ca50e67fd7""]",1190,true,90.30 

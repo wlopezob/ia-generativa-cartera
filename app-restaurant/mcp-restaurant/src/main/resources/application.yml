@@ -1,0 +1,20 @@
+spring:
+  application:
+    name: restaurant-server-mcp
+  ai:
+    mcp:
+      server:
+        name: restaurant-server-mcp
+        version: 0.0.1
+# spring.main.web-application-type=none
+
+# NOTE: You must disable the banner and the console logging 
+# to allow the STDIO transport to work !!!
+  main:
+    banner-mode: off
+# logging.pattern.console=
+
+# Configuración de logging
+logging:
+  file:
+    name: ./logs/starter-webflux-server.log

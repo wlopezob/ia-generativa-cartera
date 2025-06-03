@@ -1,0 +1,106 @@
+/* Styles for markdown content */
+:host ::ng-deep markdown {
+  line-height: 1.6;
+}
+
+:host ::ng-deep markdown h1,
+:host ::ng-deep markdown h2,
+:host ::ng-deep markdown h3,
+:host ::ng-deep markdown h4,
+:host ::ng-deep markdown h5,
+:host ::ng-deep markdown h6 {
+  margin-top: 1em;
+  margin-bottom: 0.5em;
+  font-weight: 600;
+}
+
+:host ::ng-deep markdown h1 {
+  font-size: 1.5rem;
+}
+
+:host ::ng-deep markdown h2 {
+  font-size: 1.25rem;
+}
+
+:host ::ng-deep markdown h3 {
+  font-size: 1.125rem;
+}
+
+:host ::ng-deep markdown p {
+  margin-bottom: 1em;
+}
+
+:host ::ng-deep markdown ul,
+:host ::ng-deep markdown ol {
+  margin-left: 1.5em;
+  margin-bottom: 1em;
+}
+
+:host ::ng-deep markdown ul {
+  list-style-type: disc;
+}
+
+:host ::ng-deep markdown ol {
+  list-style-type: decimal;
+}
+
+:host ::ng-deep markdown li {
+  margin-bottom: 0.25em;
+}
+
+:host ::ng-deep markdown code {
+  background-color: rgba(0, 0, 0, 0.05);
+  padding: 0.2em 0.4em;
+  border-radius: 3px;
+  font-family: monospace;
+  font-size: 0.9em;
+}
+
+:host ::ng-deep markdown pre {
+  background-color: rgb(246, 248, 250);
+  border-radius: 6px;
+  padding: 1em;
+  overflow-x: auto;
+  margin-bottom: 1em;
+}
+
+:host ::ng-deep markdown pre code {
+  background-color: transparent;
+  padding: 0;
+  font-size: 0.9em;
+  line-height: 1.5;
+}
+
+:host ::ng-deep markdown blockquote {
+  border-left: 4px solid #dfe2e5;
+  padding-left: 1em;
+  color: #6a737d;
+  margin-bottom: 1em;
+}
+
+:host ::ng-deep markdown table {
+  border-collapse: collapse;
+  width: 100%;
+  margin-bottom: 1em;
+}
+
+:host ::ng-deep markdown table th,
+:host ::ng-deep markdown table td {
+  border: 1px solid #dfe2e5;
+  padding: 0.5em 1em;
+}
+
+:host ::ng-deep markdown table th {
+  background-color: #f6f8fa;
+  font-weight: 600;
+}
+
+:host ::ng-deep markdown a {
+  color: #2563eb;
+  text-decoration: underline;
+}
+
+:host ::ng-deep markdown img {
+  max-width: 100%;
+  height: auto;
+}

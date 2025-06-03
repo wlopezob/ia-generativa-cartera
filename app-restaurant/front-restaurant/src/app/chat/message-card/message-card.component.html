@@ -1,0 +1,33 @@
+<div class="flex items-start space-x-3">
+  <img [src]="message.avatar" alt="avatar" class="w-10 h-10 rounded-full border" />
+  <div>
+    <div class="flex items-center space-x-2">
+      <span class="font-semibold text-gray-900">{{ message.sender }}</span>
+      <span class="text-xs text-gray-400">{{ message.time }}</span>
+    </div>
+    @if (message.text) {
+      <div class="mt-1 text-gray-800">
+        <markdown [data]="message.text"></markdown>
+      </div>
+    }
+    @if (message.images.length) {
+      <div class="flex flex-wrap gap-2 mt-2">
+        @for (img of message.images; track img; let i = $index) {
+          <img [src]="img" class="w-20 h-20 object-cover rounded-lg border" />
+        }
+      </div>
+    }
+    @if (message.link) {
+      <div class="mt-2">
+        <a [href]="message.link" target="_blank" class="text-blue-600 underline break-all">{{ message.link }}</a>
+      </div>
+    }
+    @if (message.file) {
+      <div class="mt-2 flex items-center space-x-2 bg-gray-100 rounded px-2 py-1 w-fit">
+        <svg class="w-5 h-5 text-gray-500" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M7 7v10a5 5 0 0010 0V7"/><path stroke-linecap="round" stroke-linejoin="round" d="M12 17V3m0 0L8.5 6.5M12 3l3.5 3.5"/></svg>
+        <span class="text-xs text-gray-700">{{ message.file.name }}</span>
+        <span class="text-xs text-gray-400">{{ message.file.size }}</span>
+      </div>
+    }
+  </div>
+</div>

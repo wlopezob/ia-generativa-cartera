@@ -1,0 +1,130 @@
+/* Base styles */
+:host {
+  display: block;
+  width: 100vw;
+  height: 100vh;
+  overflow: hidden;
+}
+
+/* Transition styles */
+.transition-all {
+  transition-property: all;
+  transition-duration: 300ms;
+  transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.transition-transform {
+  transition-property: transform;
+  transition-duration: 300ms;
+  transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.transition-opacity {
+  transition-property: opacity;
+  transition-duration: 150ms;
+  transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Fade Animation */
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes fadeOut {
+  from { opacity: 1; }
+  to { opacity: 0; }
+}
+
+.fade-in {
+  animation: fadeIn 0.3s ease-in-out;
+}
+
+.fade-out {
+  animation: fadeOut 0.3s ease-in-out;
+}
+
+/* Sidebar styles */
+.sidebar {
+  will-change: transform;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+}
+
+/* Backdrop styles */
+.bg-opacity-50 {
+  backdrop-filter: blur(4px);
+}
+
+/* Animation for loading indicator */
+@keyframes pulse {
+  0%, 100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+  50% {
+    transform: scale(1.1);
+    opacity: 0.7;
+  }
+}
+
+.animate-pulse {
+  animation: pulse 1.5s ease-in-out infinite;
+}
+
+/* Spinner animation */
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+.animate-spin {
+  animation: spin 1s linear infinite;
+}
+
+/* Prevent scrolling when sidebar is open on mobile */
+:host-context(body.sidebar-open) {
+  overflow: hidden;
+}
+
+/* Asegura que el contenido principal se expanda correctamente */
+.flex-1 {
+  flex: 1 1 0%;
+  min-width: 0;
+}
+
+/* Estilos específicos para el contenido principal */
+.main-content {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  min-width: 0;
+  width: 100%;
+  height: 100%;
+  transition: margin-left 0.3s ease;
+}
+
+/* Ajustes para el contenido cuando el sidebar está cerrado */
+.sidebar-closed .main-content {
+  margin-left: 0;
+  width: 100%;
+}
+
+/* Delays para animaciones */
+.animation-delay-200 {
+  animation-delay: 200ms;
+}
+
+.animation-delay-400 {
+  animation-delay: 400ms;
+}
+
+/* Ajustes para pantallas pequeñas */
+@media (max-width: 768px) {
+  .sidebar-open {
+    overflow: hidden;
+  }
+  
+  .sidebar {
+    position: absolute;
+  }
+}

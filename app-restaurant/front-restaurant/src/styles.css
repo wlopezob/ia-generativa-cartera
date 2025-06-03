@@ -1,0 +1,51 @@
+@import "tailwindcss";
+/* You can add global styles to this file, and also import other style files */
+
+/* Estilos para el pre-loader */
+.app-loading {
+  opacity: 1;
+  transition: opacity 0.5s ease-in-out;
+}
+
+.app-loading.loaded {
+  opacity: 0;
+}
+
+/* Evita parpadeos durante la inicialización */
+body.app-initializing {
+  background-color: white;
+  overflow: hidden;
+}
+
+body.app-initializing app-root {
+  opacity: 0;
+}
+
+/* Animaciones suaves para app-root */
+app-root {
+  display: block;
+  opacity: 1;
+  transition: opacity 0.3s ease-in-out;
+}
+
+/* Scroll suave */
+html {
+  scroll-behavior: smooth;
+}
+
+/* Evitar desbordamiento */
+html, body {
+  width: 100%;
+  height: 100%;
+  margin: 0;
+  padding: 0;
+  overflow: hidden;
+}
+
+/* Transitions for router outlet */
+router-outlet ~ * {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  transition: all 0.3s ease-in-out;
+}

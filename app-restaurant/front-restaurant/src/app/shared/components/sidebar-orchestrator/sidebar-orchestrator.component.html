@@ -1,0 +1,48 @@
+<!-- Sidebar container with animation -->
+<div 
+  class="sidebar-container"
+  [@sidebarAnimation]="sidebarVisible ? 'visible' : 'hidden'"
+  (@sidebarAnimation.start)="onAnimationStart($event)"
+  (@sidebarAnimation.done)="onAnimationDone($event)"
+>
+  <app-sidebar
+    [rooms]="rooms"
+    [activeRoomIndex]="activeRoomIndex"
+    (addRoom)="onAddRoom()"
+    (removeRoom)="onRemoveRoom($event)"
+    (setActiveRoom)="onSetActiveRoom($event)"
+  ></app-sidebar>
+</div>
+
+<!-- Overlay for mobile with animation -->
+<div 
+  class="sidebar-overlay"
+  *ngIf="isMobile"
+  [@overlayAnimation]="sidebarVisible ? 'visible' : 'hidden'"
+  (@overlayAnimation.start)="onAnimationStart($event)"
+  (@overlayAnimation.done)="onAnimationDone($event)"
+  (click)="toggleSidebar()"
+></div>
+
+<!-- Mobile toggle button (fixed position) -->
+<button 
+  *ngIf="isMobile && !sidebarVisible"
+  class="mobile-toggle-button"
+  (click)="toggleSidebar()"
+  aria-label="Open sidebar"
+>
+  <svg 
+    xmlns="http://www.w3.org/2000/svg" 
+    fill="none" 
+    viewBox="0 0 24 24" 
+    stroke="currentColor" 
+    class="w-6 h-6"
+  >
+    <path 
+      stroke-linecap="round" 
+      stroke-linejoin="round" 
+      stroke-width="2" 
+      d="M4 6h16M4 12h16M4 18h16"
+    ></path>
+  </svg>
+</button> 
