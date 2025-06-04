@@ -1,11 +1,11 @@
 from google.adk.agents import Agent
 from google.adk.tools.mcp_tool.mcp_toolset import MCPToolset
 from google.adk.tools.mcp_tool.mcp_session_manager import SseServerParams
-
+from google.adk.tools import load_memory
 
 root_agent = Agent(
 #   # A unique name for the agent.
-   name="google_search_agent",
+   name="agent_restaurant_assistant",
    # The Large Language Model (LLM) that agent will use.
    model="gemini-2.0-flash-exp", # if this model does not work, try below
    #model="gemini-2.0-flash-live-001",
@@ -31,6 +31,7 @@ root_agent = Agent(
         Responde siempre en español de manera profesional y amigable.   
    """,
    tools=[
+      #load_memory,
       MCPToolset(
          connection_params=SseServerParams(
             url="http://localhost:8080/sse",
@@ -38,6 +39,7 @@ root_agent = Agent(
             sse_read_timeout=60*5
          )
       )
-   ]
+   ],
+   output_key="agent_restaurant_response"
 )
 

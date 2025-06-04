@@ -34,7 +34,6 @@ warnings.filterwarnings("ignore", category=UserWarning, module="pydantic")
 # Load Gemini API Key
 load_dotenv()
 
-APP_NAME = "ADK Streaming example"
 
 router = APIRouter(prefix="/streaming", tags=["Streaming"])
 
@@ -117,13 +116,13 @@ async def start_agent_session(user_id, is_audio=False):
 
     # Create a Runner
     runner = InMemoryRunner(
-        app_name=APP_NAME,
+        app_name=settings.app_name,
         agent=root_agent,
     )
 
     # Create a Session
     session = await runner.session_service.create_session(
-        app_name=APP_NAME,
+        app_name=settings.app_name,
         user_id=user_id,  # Replace with actual user ID
     )
 
