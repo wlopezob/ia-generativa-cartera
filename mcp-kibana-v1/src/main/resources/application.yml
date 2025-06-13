@@ -1,0 +1,14 @@
+spring:
+  application:
+    name: mcp-kibana-v1
+  ai:
+    mcp:
+      server:
+        name: mcp-kibana-v1
+        version: 0.0.1  
+        type: ASYNC
+        request-timeout: 60
+server:
+  port: 8084
+kibana:
+  auth: "Basic xxxxxxxxxxxxxxx"
