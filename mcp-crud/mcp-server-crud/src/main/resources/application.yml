@@ -1,0 +1,40 @@
+spring:
+  application:
+    name: mcp-crud-v1
+  main:
+    banner-mode: off
+  r2dbc:
+    url: r2dbc:h2:mem:///testdb;DB_CLOSE_DELAY=-1;DB_CLOSE_ON_EXIT=FALSE
+    username: sa
+    password: ""
+    pool:
+      enabled: true
+      initial-size: 10
+      max-size: 20
+  h2:
+    console:
+      enabled: true
+      path: /h2-console
+  sql:
+    init:
+      schema-locations: classpath:schema.sql
+#      data-locations: classpath:data.sql
+      mode: always
+  ai:
+    mcp:
+      server:
+        name: personas-mcp-server
+        version: 1.0.0
+        type: ASYNC
+        request-timeout: 60
+        capabilities:
+          resource: true
+          tool: true
+        resource-change-notification: true
+server:
+  port: 8085
+logging:
+  level:
+    org.springframework.ai.mcp: DEBUG
+    io.r2dbc: DEBUG
+    org.springframework.r2dbc: DEBUG
