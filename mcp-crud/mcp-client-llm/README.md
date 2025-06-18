@@ -1,4 +1,4 @@
-# MCP Client LLM
+# ADK - MCP Client
 
 Este proyecto implementa un cliente LLM (Large Language Model) utilizando Google Agent Development Kit (ADK) para la gestión de personas.
 
@@ -33,3 +33,9 @@ Esto instalará todas las dependencias definidas en el archivo `pyproject.toml`,
 ```bash
 adk web
 ```
+4. Tools 
+![flow](docs/img/flow.png)
+
+5. Ejemplo crear persona
+![crear01](docs/img/crear01.png)
+![crear02](docs/img/crear02.png)
