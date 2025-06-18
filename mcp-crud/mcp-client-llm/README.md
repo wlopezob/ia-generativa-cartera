@@ -8,7 +8,7 @@ Este proyecto implementa un cliente LLM (Large Language Model) utilizando Google
 - uv (gestor de paquetes moderno y rápido para Python)
 - renombrar el archivo .env.copy a .env y pegar el apikey de google ai studio
 - Acceso a la API de Google Gemini
-- Configurar MCP Server en app/agent.py
+- Configurar MCP Server en app/agent.py (desplegar primero el proyecto MCP-SERVER-CRUD)
 ```python
 tools=[
       get_current_date,

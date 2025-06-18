@@ -9,6 +9,8 @@ This project implements a complete CRUD system for managing people using Spring 
 - **H2 Database**: In-memory database
 - **Lombok**: Reduce boilerplate code
 - **MCP Server Tools**: Tools for AI system integration
+- **Maven**
+- **Java 21**
 
 ## Data Model
 
@@ -55,6 +57,10 @@ This project implements a complete CRUD system for managing people using Spring 
    - Parameters:
      - `id` (required): Person's ID
 
+### Execute MCP SERVER
+```bash
+mvn spring-boot:run
+```
 ### Inspector MCP
 1. execute inspector
 ```bash
