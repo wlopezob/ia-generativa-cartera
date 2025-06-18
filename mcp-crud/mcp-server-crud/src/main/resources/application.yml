@@ -28,7 +28,6 @@ spring:
         type: ASYNC
         request-timeout: 60
         capabilities:
-          resource: true
           tool: true
         resource-change-notification: true
 server:

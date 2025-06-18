@@ -6,15 +6,17 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 import com.wlopezob.crud.mcp.tools.PersonaMcpTools;
+import com.wlopezob.crud.mcp.tools.TransactionMcpTools;
 
 
 @Configuration
 public class McpConfig {
 
     @Bean
-    public ToolCallbackProvider personaTools(PersonaMcpTools personaMcpTools) {
+    public ToolCallbackProvider personaTools(PersonaMcpTools personaMcpTools, 
+    TransactionMcpTools transactionMcpTools) {
         return MethodToolCallbackProvider.builder()
-                .toolObjects(personaMcpTools)
+                .toolObjects(personaMcpTools, transactionMcpTools)
                 .build();
     }
 } 

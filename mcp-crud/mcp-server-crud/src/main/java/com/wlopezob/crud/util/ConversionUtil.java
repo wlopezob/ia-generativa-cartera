@@ -5,12 +5,14 @@ import com.wlopezob.crud.exception.FechaInvalidaException;
 import com.wlopezob.crud.exception.TipoPersonaInvalidoException;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
 
 public class ConversionUtil {
     
     private static final DateTimeFormatter FORMATTER = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+    private static final DateTimeFormatter DATETIME_FORMATTER = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm:ss");
     
     /**
      * Convierte String a LocalDate
@@ -35,6 +37,31 @@ public class ConversionUtil {
             return null;
         }
         return fecha.format(FORMATTER);
+    }
+    
+    /**
+     * Convierte String a LocalDateTime
+     */
+    public static LocalDateTime stringToLocalDateTime(String fecha) {
+        if (fecha == null || fecha.trim().isEmpty()) {
+            throw new FechaInvalidaException("La fecha y hora no puede estar vacía");
+        }
+        
+        try {
+            return LocalDateTime.parse(fecha.trim(), DATETIME_FORMATTER);
+        } catch (DateTimeParseException e) {
+            throw new FechaInvalidaException(fecha, e);
+        }
+    }
+    
+    /**
+     * Convierte LocalDateTime a String
+     */
+    public static String localDateTimeToString(LocalDateTime fecha) {
+        if (fecha == null) {
+            return null;
+        }
+        return fecha.format(DATETIME_FORMATTER);
     }
     
     /**

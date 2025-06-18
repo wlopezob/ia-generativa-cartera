@@ -57,6 +57,19 @@ public class GlobalExceptionHandler {
         return Mono.just(ResponseEntity.badRequest().body(error));
     }
 
+    @ExceptionHandler(SaldoInsuficienteException.class)
+    public Mono<ResponseEntity<Map<String, Object>>> handleSaldoInsuficiente(SaldoInsuficienteException ex) {
+        log.error("Error de saldo insuficiente: {}", ex.getMessage());
+        Map<String, Object> error = Map.of(
+            "timestamp", LocalDateTime.now(),
+            "status", HttpStatus.BAD_REQUEST.value(),
+            "error", "Bad Request",
+            "message", ex.getMessage(),
+            "path", "/api/transactions"
+        );
+        return Mono.just(ResponseEntity.badRequest().body(error));
+    }
+
     @ExceptionHandler(Exception.class)
     public Mono<ResponseEntity<Map<String, Object>>> handleGenericException(Exception ex) {
         log.error("Error inesperado: {}", ex.getMessage(), ex);

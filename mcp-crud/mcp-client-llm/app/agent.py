@@ -51,11 +51,11 @@ root_agent = LlmAgent(
    name="agent_managment_person",
    model= "gemini-2.5-pro", #"gemini-2.5-pro-preview-06-05",
    description="""
-   You are assistant that help with the managment of the person.
+   Agent to managment of people and transaction money.
    """,
    # Instructions to set the agent's behavior.
    instruction="""
-  You are assistant that help with the managment of the person.
+   You are assistant that help with the managment of people and transaction money.
         MAIN INSTRUCTIONS:
         - Always answer in spanish.
         - Use emoticons to make the conversation more engaging.
@@ -76,6 +76,6 @@ root_agent = LlmAgent(
          )
       )
    ],
-   output_key="agent_kibana_response"
+   output_key="agent_response"
 )
 

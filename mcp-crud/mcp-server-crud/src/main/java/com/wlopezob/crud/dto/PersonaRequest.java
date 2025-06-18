@@ -10,4 +10,5 @@ public class PersonaRequest {
     private String fecha; // Formato: dd/MM/yyyy
     private String tipoPersona; // String que se convierte a enum
     private String dni;
+    private Double saldo;
 }

@@ -33,7 +33,8 @@ public class PersonaMcpTools {
             @ToolParam(description = "Edad de la persona", required = true) Integer edad,
             @ToolParam(description = "Fecha de nacimiento en formato dd/MM/yyyy", required = true) String fecha,
             @ToolParam(description = "Tipo de persona (Padre, Madre e Hijo)", required = true) String tipoPersona,
-            @ToolParam(description = "DNI de la persona, debe ser único", required = true) String dni) {
+            @ToolParam(description = "DNI de la persona, debe ser único", required = true) String dni,
+            @ToolParam(description = "Saldo de la persona", required = false) Double saldo) {
         
         log.info("Ejecutando herramienta para crear persona: {}", nombre);
         
@@ -44,6 +45,7 @@ public class PersonaMcpTools {
         request.setFecha(fecha);
         request.setTipoPersona(tipoPersona);
         request.setDni(dni);
+        request.setSaldo(saldo);
         
         Mono<PersonaResponse> responseMono = personaService.createPersona(request);
         return responseMono.block();

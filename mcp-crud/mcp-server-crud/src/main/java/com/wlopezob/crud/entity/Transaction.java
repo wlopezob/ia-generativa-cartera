@@ -1,34 +1,27 @@
 package com.wlopezob.crud.entity;
 
-import com.wlopezob.crud.enums.TipoPersona;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.relational.core.mapping.Table;
 
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-@Table("personas")
-public class Persona {
+@Table("transactions")
+public class Transaction {
     
     @Id
     private Long id;
     
-    private String nombre;
+    private Long senderPersonaId;
     
-    private String apellido;
+    private Long receiverPersonaId;
     
-    private Integer edad;
+    private LocalDateTime fecha;
     
-    private LocalDate fecha;
-    
-    private TipoPersona tipoPersona;
-    
-    private String dni;
-    
-    private Double saldo;
-}
+    private Double monto;
+} 

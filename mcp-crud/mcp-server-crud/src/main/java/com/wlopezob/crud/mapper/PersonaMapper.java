@@ -35,5 +35,6 @@ public interface PersonaMapper {
     @Mapping(target = "fecha", expression = "java(ConversionUtil.stringToLocalDate(request.getFecha()))")
     @Mapping(target = "tipoPersona", expression = "java(ConversionUtil.stringToTipoPersona(request.getTipoPersona()))")
     @Mapping(target = "dni", source = "dni")
+    @Mapping(target = "saldo", ignore = true)
     void updateEntityFromRequest(PersonaRequest request, @MappingTarget Persona persona);
 }

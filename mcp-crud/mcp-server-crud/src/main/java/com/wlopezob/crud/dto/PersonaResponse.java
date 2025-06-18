@@ -11,4 +11,5 @@ public class PersonaResponse {
     private String fecha; // Formato: dd/MM/yyyy
     private String tipoPersona; // String del enum
     private String dni;
+    private Double saldo;
 }
