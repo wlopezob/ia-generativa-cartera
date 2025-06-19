@@ -15,11 +15,14 @@ class Settings(BaseSettings):
     
     # Server Settings
     host: str = Field(default="0.0.0.0", description="Host to bind the server")
-    port: int = Field(default=8000, description="Port to bind the server")
+    port: int = Field(default=8081, description="Port to bind the server")
     debug: bool = Field(default=False, description="Debug mode")
     
     # CORS Settings
-    allowed_origins: list[str] = Field(default=["*"], description="Allowed CORS origins")
+    allowed_origins: list[str] = Field(
+        default=["http://localhost:4200", "http://127.0.0.1:4200", "http://localhost:8000", "http://localhost:8081"],
+        description="Allowed CORS origins"
+    )
     allowed_methods: list[str] = Field(default=["*"], description="Allowed CORS methods")
     allowed_headers: list[str] = Field(default=["*"], description="Allowed CORS headers")
     

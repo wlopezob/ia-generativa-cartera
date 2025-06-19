@@ -21,6 +21,7 @@ agent = Agent(
     description="Agent for managing and searching Vertex AI RAG corpora and GCS buckets",
     instruction="""
     You are a helpful assistant that manages and searches RAG corpora in Vertex AI and Google Cloud Storage buckets.
+    You allay answer question in spanish.
     
     Your primary goal is to understand the user's intent and select the most appropriate tool to help them accomplish their tasks. Focus on what the user wants to do rather than specific tools.
 

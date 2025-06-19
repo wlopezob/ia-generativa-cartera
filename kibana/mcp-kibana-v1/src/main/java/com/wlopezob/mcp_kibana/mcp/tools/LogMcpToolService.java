@@ -1,9 +1,11 @@
-package com.wlopezob.mcp_kibana.mcp;
+package com.wlopezob.mcp_kibana.mcp.tools;
 
 import com.wlopezob.mcp_kibana.dto.LogResponseDto;
 import com.wlopezob.mcp_kibana.dto.LogSearchRequestDto;
 import com.wlopezob.mcp_kibana.service.LogService;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+
 import org.springframework.ai.tool.annotation.Tool;
 import org.springframework.ai.tool.annotation.ToolParam;
 import org.springframework.stereotype.Service;
@@ -13,6 +15,7 @@ import java.time.format.DateTimeFormatter;
 
 @Service
 @RequiredArgsConstructor
+@Slf4j
 public class LogMcpToolService {
     private final LogService logService;
     private static final DateTimeFormatter DATE_FORMATTER = DateTimeFormatter.ISO_DATE_TIME;
@@ -35,6 +38,8 @@ public class LogMcpToolService {
             required = true)
             String endDate
     ) {
+        log.info("Searching logs for index: {}, requestId: {}, startDate: {}, endDate: {}", 
+                 indexName, requestId, startDate, endDate);  
         LogSearchRequestDto request = LogSearchRequestDto.builder()
                 .indexName(indexName)
                 .requestId(requestId)

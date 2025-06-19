@@ -1,6 +1,8 @@
 spring:
   application:
     name: mcp-kibana-v1
+  main:
+    banner-mode: off
   ai:
     mcp:
       server:
@@ -8,7 +10,14 @@ spring:
         version: 0.0.1  
         type: ASYNC
         request-timeout: 60
+        capabilities:
+          resource: true
+          tool: true
+        resource-change-notification: true
 server:
   port: 8084
 kibana:
   auth: "Basic xxxxxxxxxxxxxxx"
+logging:
+  level:
+    org.springframework.ai.mcp: DEBUG  

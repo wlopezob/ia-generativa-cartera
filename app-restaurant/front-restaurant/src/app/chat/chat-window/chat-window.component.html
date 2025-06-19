@@ -1,10 +1,15 @@
 <div class="flex flex-col h-full bg-blue-50">
+  <!-- Depuración visual de mensajes -->
+  <div class="bg-yellow-100 text-xs text-gray-800 p-2 border-b border-yellow-300 overflow-auto max-h-40">
+    <strong>Debug - Mensajes:</strong> {{ messages.length }} mensajes
+    <pre style="font-size: 9px; white-space: pre-wrap;">{{ messages | json }}</pre>
+  </div>
+  
   <!-- Indicador de depuración (quitar en producción) -->
   <div class="bg-gray-100 text-xs text-gray-500 px-2 py-1 text-center md:text-left" *ngIf="sessionId">
     Session ID: {{ sessionId.slice(0, 8) }}...
   </div>
-  
-  <div class="flex-1 overflow-y-auto p-3 md:p-6 space-y-4">
+    <div class="flex-1 overflow-y-auto p-3 md:p-6 space-y-4">
     @if (messages.length === 0) {
       <div class="flex items-center justify-center h-full text-gray-400 text-center">
         <div>
@@ -17,8 +22,14 @@
       </div>
     }
     
-    @for (msg of messages; let i = $index; track i) {
-      <app-message-card [message]="msg"></app-message-card>
+    @for (msg of messages; let i = $index; track msg.uuid) {
+      <div class="relative">
+        <!-- Indicador de mensaje para depuración -->
+        <div class="absolute top-0 right-0 bg-blue-200 text-xs px-1 rounded">
+          msg-{{i}}: {{msg.sender}}
+        </div>
+        <app-message-card [message]="msg"></app-message-card>
+      </div>
     }
     
     @if (isLoading) {
@@ -29,12 +40,23 @@
         <span class="text-sm ml-2">ChefAPP está escribiendo...</span>
       </div>
     }
+    
+    @if (isRecording) {
+      <div class="flex items-center space-x-2 text-red-500 animate-pulse">
+        <div class="w-2 h-2 bg-red-500 rounded-full"></div>
+        <div class="w-2 h-2 bg-red-500 rounded-full animation-delay-200"></div>
+        <div class="w-2 h-2 bg-red-500 rounded-full animation-delay-400"></div>
+        <span class="text-sm ml-2">Grabando audio...</span>
+      </div>
+    }
   </div>
   
   <div class="border-t bg-white p-3 md:p-4">
     <app-message-input 
-      [isLoading]="isLoading" 
-      (send)="addMessage($event)">
+      [isLoading]="isLoading"
+      [sessionId]="sessionId"
+      (send)="addMessage($event)"
+      (recordingChange)="onRecordingChange($event)">
     </app-message-input>
   </div>
 </div>

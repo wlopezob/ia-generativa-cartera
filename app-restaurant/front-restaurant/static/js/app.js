@@ -25,7 +25,7 @@
 // Connect the server with a WebSocket connection
 const sessionId = Math.random().toString().substring(10);
 const ws_url =
-  "ws://" + window.location.host + "/api/restaurant/streaming/ws/" + sessionId;
+  "ws://localhost:8081/api/restaurant/streaming/ws/" + sessionId;
 let websocket = null;
 let is_audio = false;
 

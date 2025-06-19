@@ -1,4 +1,4 @@
-package com.wlopezob.mcp_kibana.mcp;
+package com.wlopezob.mcp_kibana.mcp.tools;
 
 import com.wlopezob.mcp_kibana.dto.IndexListResponseDto;
 import com.wlopezob.mcp_kibana.service.IndexService;

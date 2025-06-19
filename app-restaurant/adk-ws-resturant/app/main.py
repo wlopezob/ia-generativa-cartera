@@ -6,7 +6,10 @@ from fastapi.staticfiles import StaticFiles
 from pathlib import Path
 from fastapi.responses import FileResponse
 import os
+from dotenv import load_dotenv
 
+# Load Gemini API Key
+load_dotenv()
 def create_app() -> FastAPI:
     """
     Create and configure FastAPI application
@@ -26,13 +29,14 @@ def create_app() -> FastAPI:
         openapi_url="/openapi.json"
     )
     
-    # Add CORS middleware
+    # Add CORS middleware with specific configuration for WebSockets
     app.add_middleware(
         CORSMiddleware,
         allow_origins=settings.allowed_origins,
         allow_credentials=True,
-        allow_methods=settings.allowed_methods,
-        allow_headers=settings.allowed_headers,
+        allow_methods=["GET", "POST", "PUT", "DELETE", "OPTIONS", "PATCH", "HEAD"],
+        allow_headers=["*"],
+        expose_headers=["*"],
     )
     
     # Include API routers

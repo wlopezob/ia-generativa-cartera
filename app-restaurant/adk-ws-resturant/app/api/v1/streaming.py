@@ -20,7 +20,7 @@ from google.genai.types import (
 from google.adk.runners import InMemoryRunner
 from google.adk.agents import LiveRequestQueue
 from google.adk.agents.run_config import RunConfig
-
+from app.core.adk_runner import runner
 from app.core.config import settings
 from app.agent.agent import root_agent
 from dotenv import load_dotenv
@@ -85,6 +85,10 @@ async def websocket_info():
                     "mime_type": "audio/pcm",
                     "data": "base64_encoded_audio_data"
                 },
+                "transcription": {
+                    "mime_type": "text/transcription",
+                    "data": "Transcripción del audio enviado"
+                },
                 "control": {
                     "turn_complete": "boolean",
                     "interrupted": "boolean"
@@ -111,18 +115,19 @@ ws.onmessage = (event) => {
         }
     }
 
+APP_NAME = "ADK Streaming example"
 async def start_agent_session(user_id, is_audio=False):
     """Starts an agent session"""
 
     # Create a Runner
     runner = InMemoryRunner(
-        app_name=settings.app_name,
+        app_name=APP_NAME,
         agent=root_agent,
     )
 
     # Create a Session
     session = await runner.session_service.create_session(
-        app_name=settings.app_name,
+        app_name=APP_NAME,
         user_id=user_id,  # Replace with actual user ID
     )
 
@@ -142,6 +147,10 @@ async def start_agent_session(user_id, is_audio=False):
 
     #if is_audio:
     #    run_config.output_audio_transcription = {}
+    
+    # Habilitar transcripción de audio en todos los casos
+    if is_audio:
+        run_config.output_audio_transcription = {}
 
     # Create a LiveRequestQueue for this session
     live_request_queue = LiveRequestQueue()
@@ -229,39 +238,30 @@ async def websocket_endpoint(
     user_id: str, 
     is_audio: Optional[str] = "false"
 ):
-    """
-    WebSocket endpoint for restaurant AI assistant streaming
-    
-    Args:
-        websocket: WebSocket connection
-        user_id: Unique user identifier
-        is_audio: Whether to use audio mode ("true" or "false")
-    """
+    """Client websocket endpoint"""
+
+    # Wait for client connection
     await websocket.accept()
-    print(f"Restaurant assistant connected for user #{user_id}, audio mode: {is_audio}")
-    
-    try:
-        # Start agent session
-        live_events, live_request_queue = await start_agent_session(
-            user_id, 
-            is_audio == "true"
-        )
-        
-        # Start tasks
-        agent_to_client_task = asyncio.create_task(
-            agent_to_client_messaging(websocket, live_events)
-        )
-        client_to_agent_task = asyncio.create_task(
-            client_to_agent_messaging(websocket, live_request_queue)
-        )
-        
-        # Wait until the websocket is disconnected or an error occurs
-        tasks = [agent_to_client_task, client_to_agent_task]
-        await asyncio.wait(tasks, return_when=asyncio.FIRST_EXCEPTION)
-        
-    except Exception as e:
-        print(f"WebSocket error for user {user_id}: {e}")
-    finally:
-        # Close LiveRequestQueue
-        live_request_queue.close()
-        print(f"Restaurant assistant disconnected for user #{user_id}") 
+    print(f"Client #{user_id} connected, audio mode: {is_audio}")
+
+    # Start agent session
+    user_id_str = str(user_id)
+    live_events, live_request_queue = await start_agent_session(user_id_str, is_audio == "true")
+
+    # Start tasks
+    agent_to_client_task = asyncio.create_task(
+        agent_to_client_messaging(websocket, live_events)
+    )
+    client_to_agent_task = asyncio.create_task(
+        client_to_agent_messaging(websocket, live_request_queue)
+    )
+
+    # Wait until the websocket is disconnected or an error occurs
+    tasks = [agent_to_client_task, client_to_agent_task]
+    await asyncio.wait(tasks, return_when=asyncio.FIRST_EXCEPTION)
+
+    # Close LiveRequestQueue
+    live_request_queue.close()
+
+    # Disconnected
+    print(f"Client #{user_id} disconnected")

@@ -61,6 +61,11 @@
 			<artifactId>reactor-test</artifactId>
 			<scope>test</scope>
 		</dependency>
+		<dependency>
+			<groupId>com.logaritex.mcp</groupId>
+			<artifactId>spring-ai-mcp-annotations</artifactId>
+			<version>0.1.0</version>
+		</dependency>
 	</dependencies>
 	<dependencyManagement>
 		<dependencies>

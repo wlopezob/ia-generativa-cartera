@@ -33,13 +33,15 @@
       </span>
     </button>
   </div>
-  <div class="flex-1">
-    @if (rooms.length > 0) {
+  <div class="flex-1">    @if (rooms.length > 0) {
       <app-chat-window 
         [messages]="rooms[activeRoomIndex].messages" 
         [sessionId]="rooms[activeRoomIndex].uuid"
         [isLoading]="rooms[activeRoomIndex]?.isLoading || false"
-        (send)="handleSendMessage($event)">
+        (send)="handleSendMessage($event)"
+        (turnComplete)="handleTurnComplete()"
+        (wsMessageReceived)="handleWebSocketMessage($event)"
+        (recordingStateChange)="handleRecordingStateChange($event)">
       </app-chat-window>
     }
     @if (rooms.length === 0) {
