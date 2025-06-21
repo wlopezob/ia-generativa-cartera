@@ -49,9 +49,9 @@ def get_current_date():
 root_agent = LlmAgent(
 #   # A unique name for the agent.
    name="agent_managment_person",
-   model= "gemini-2.5-pro", #"gemini-2.5-pro-preview-06-05",
+   model= "gemini-2.5-pro",
    description="""
-   Agent to managment of people and transaction money.
+   Agent for the management of people and transactions.
    """,
    # Instructions to set the agent's behavior.
    instruction="""
